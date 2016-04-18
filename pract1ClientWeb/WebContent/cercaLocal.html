@@ -9,11 +9,21 @@
 <h1>Cerca</h1>
 <form action="search" method="post">
 	Cerca per:
-	<select>
-		<option> Nom local </option>
-		<option> Tipus local </option>
-	</select>
+	<br>
+	<input type=radio" name "tipusCerca" value="0" checked>Nom
 	<input type="text" name="nomLocal" value="Introdueix terme a cercar">
+	<br>
+	<br>
+	<input type=radio" name "tipusCerca" value="1" >Tipus
+	<select>
+		<option value="0">Hotels</option>
+		<option value="1">Bars</option>
+	</select>
+	<br>
+	<br>
+	<input type=radio" name "tipusCerca" value="2" checked>Carrer
+	<input type="text" name="nomLocal" value="Introdueix terme a cercar">
+	<br>
 	<br>
 <!-- if -->
 	<input type="submit" value="Cercar" id="searchBtn"/>
