@@ -6,21 +6,33 @@ public class Local {
 	private String name;
 	private int typeLocal;
 	private Address address;
+	private int[] accessibility;	//[codi_caract1,valor1, ...] 
 	private String observations;
-	private boolean valid;
+	private Coord coordenates;
+	private boolean validated;
 	
 	
-	public Local(String name, int typeLocal, Address adr){
+	public Local(String name, int typeLocal, Address adr, int[] acc){
 		this.name = name;
 		this.typeLocal = typeLocal;
+		this.accessibility = acc;  //crec que no es pot tal qual...
 		this.address = adr;
+		this.observations="";
+		this.validated=false;
+		this.id=setNewId();
+	}
+
+
+	public Local(String name, int typeLocal, Address adr, int[] caract, String obs){
+		//TODO patró builder
 	}
 	
-	public Local(String name, int typeLocal, Address adr, String obs){
-		this.name = name;
-		this.typeLocal = typeLocal;
-		this.address = adr;
-		this.observations = obs;
+	public Local(String name, int typeLocal, Address adr, int[] caract, String obs, Coord xy){
+		//TODO patro builder
+	}
+	
+	public int getId(){
+		return id;
 	}
 	
 	public String getName() {
@@ -56,11 +68,29 @@ public class Local {
 	}
 
 	public boolean isValid() {
-		return valid;
+		return validated;
 	}
 
 	public void setValid(boolean valid) {
-		this.valid = valid;
+		this.validated = valid;
+	}
+	
+	public Coord getCoordenates(){
+		return this.coordenates;
+	}
+	
+	public void setCoordenates(Coord xy){
+		this.coordenates=xy;
+	}
+	
+	public int[] getAccessibility(){
+		return this.accessibility;
+	}
+	
+	
+	private int setNewId() {
+		//TODO get last id from taula Local + 1
+		return 0;
 	}
 	
 

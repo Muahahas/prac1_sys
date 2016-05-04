@@ -149,7 +149,7 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <filename>&#x2f;home&#x2f;ender&#x2f;udl_eps&#x2f;integra_sys&#x2f;pract1&#x2f;pentaho&#x2f;accessibiitat-lleida.csv</filename>
+    <filename>&#x2f;home&#x2f;ender&#x2f;udl_eps&#x2f;integra_sys&#x2f;pract1&#x2f;accessibiitat-lleida.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
