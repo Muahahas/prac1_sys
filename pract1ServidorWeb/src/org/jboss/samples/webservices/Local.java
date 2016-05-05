@@ -1,8 +1,13 @@
 package org.jboss.samples.webservices;
 
+import java.sql.*;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 public class Local {
 	
-	private int id;
+	private int idLocal;
 	private String name;
 	private int typeLocal;
 	private Address address;
@@ -12,27 +17,89 @@ public class Local {
 	private boolean validated;
 	
 	
-	public Local(String name, int typeLocal, Address adr, int[] acc){
-		this.name = name;
+	public Local(String name, int typeLocal, Address addr, int[] acc, String obs, Coord xy) throws Exception{
+
+		evaluateParams(name,typeLocal,addr,acc);		
+		
+		this.idLocal   = setNewId();
+		this.name      = name;
 		this.typeLocal = typeLocal;
-		this.accessibility = acc;  //crec que no es pot tal qual...
-		this.address = adr;
-		this.observations="";
-		this.validated=false;
-		this.id=setNewId();
+		this.address   = addr;  //ojo...
+		for(int i=0; i<acc.length; i++) 
+			this.accessibility[i]=acc[i];		
+		
+		if(!obs.isEmpty())
+			this.observations=obs;
+		if(xy != null)
+			this.coordenates=xy;  //ojo...
+		
+		this.validated=false;		
 	}
 
 
-	public Local(String name, int typeLocal, Address adr, int[] caract, String obs){
-		//TODO patró builder
+	private void evaluateParams(String name, int typeLocal, Address addr, int[] acc) throws Exception {
+		if(name.isEmpty())
+			throw new MissingNameError();
+				
+		if(!isValidTypeLocal(typeLocal))
+			throw new WrongTypeLocalError();			
+		
+		if(!isValidAddress(addr.getIdStreet()))
+			throw new WrongAddressError();
+		
+		if(!isValidAccessibility(acc,typeLocal))
+			throw new WrongAccessibilityError();
 	}
-	
-	public Local(String name, int typeLocal, Address adr, int[] caract, String obs, Coord xy){
-		//TODO patro builder
+
+
+	//comprobar que les caracteristiques pertanyen al tipo local
+	private boolean isValidAccessibility(int[] acc, int typeLocal) {
+		// TODO Auto-generated method stub 
+		//si ens falta temps ja ho farem...
+		return true;
+	}
+
+
+	//nomes mirem el codi carrerer
+	private boolean isValidAddress(int idStreet) {
+		boolean valid = false;
+		try     
+		{			
+			InitialContext cxt = new InitialContext();
+			DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");							
+					
+			Connection connection = ds.getConnection();
+			Statement stm = connection.createStatement(); 
+			valid=stm.execute("select codcar from carrerer where codcar="+idStreet+";");
+				
+			connection.close();
+			stm.close();			
+		}catch(Exception e){}
+		
+		return valid;
+	}
+
+
+	private boolean isValidTypeLocal(int typeLocal) {
+		boolean valid = false;
+		try     
+		{			
+			InitialContext cxt = new InitialContext();
+			DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");							
+					
+			Connection connection = ds.getConnection();
+			Statement stm = connection.createStatement(); 
+			valid=stm.execute("select typeLocal from tipolocal where coditipolocal="+typeLocal+";");
+				
+			connection.close();
+			stm.close();			
+		}catch(Exception e){}
+		
+		return valid;
 	}
 	
 	public int getId(){
-		return id;
+		return idLocal;
 	}
 	
 	public String getName() {
@@ -67,11 +134,11 @@ public class Local {
 		this.observations = observations;
 	}
 
-	public boolean isValid() {
+	public boolean isValidLocal() {
 		return validated;
 	}
 
-	public void setValid(boolean valid) {
+	public void setValidLocal(boolean valid) {
 		this.validated = valid;
 	}
 	
@@ -88,9 +155,26 @@ public class Local {
 	}
 	
 	
+	//id = ultim id de local + 1
 	private int setNewId() {
-		//TODO get last id from taula Local + 1
-		return 0;
+		int id = 0;
+		try     
+		{			
+			InitialContext cxt = new InitialContext();
+			DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");							
+					
+			Connection connection = ds.getConnection();
+			Statement stm = connection.createStatement();
+			String query = "select codiLocal "
+							+"from local "
+							+"ORDER BY codiLocal DESC LIMIT 1;";
+			ResultSet rs=stm.executeQuery(query);
+			id = rs.getInt(1) + 1;	
+			connection.close();
+			stm.close();			
+		}catch(Exception e){}
+		
+		return id;
 	}
 	
 
