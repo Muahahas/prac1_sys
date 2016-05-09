@@ -1,4 +1,4 @@
-package org.jboss.samples.webservices;
+package beans;
 
 public class Coord {
 	

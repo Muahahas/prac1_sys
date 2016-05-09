@@ -1,39 +1,25 @@
 package org.jboss.samples.webservices;
 
+
 import java.sql.*;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import beans.*;
+
+
+
 public class Local {
 	
-	private int idLocal;
-	private String name;
-	private int typeLocal;
-	private Address address;
-	private int[] accessibility;	//[codi_caract1,valor1, ...] 
-	private String observations;
-	private Coord coordenates;
-	private boolean validated;
+	private final Local local;
 	
 	
-	public Local(String name, int typeLocal, Address addr, int[] acc, String obs, Coord xy) throws Exception{
+	public Local(Local lb) throws Exception{
 
-		evaluateParams(name,typeLocal,addr,acc);		
-		
-		this.idLocal   = setNewId();
-		this.name      = name;
-		this.typeLocal = typeLocal;
-		this.address   = addr;  //ojo...
-		for(int i=0; i<acc.length; i++) 
-			this.accessibility[i]=acc[i];		
-		
-		if(!obs.isEmpty())
-			this.observations=obs;
-		if(xy != null)
-			this.coordenates=xy;  //ojo...
-		
-		this.validated=false;		
+		evaluateParams(lb.getName(),lb.getTypeLocal(),lb.getAddress(),lb.getAccessibility());		
+		lb.setId(setNewId());
+		this.local = lb;		
 	}
 
 
@@ -44,33 +30,35 @@ public class Local {
 		if(!isValidTypeLocal(typeLocal))
 			throw new WrongTypeLocalError();			
 		
-		if(!isValidAddress(addr.getIdStreet()))
+		if(!isValidAddress(addr))
 			throw new WrongAddressError();
 		
 		if(!isValidAccessibility(acc,typeLocal))
 			throw new WrongAccessibilityError();
+
 	}
 
 
-	//comprobar que les caracteristiques pertanyen al tipo local
 	private boolean isValidAccessibility(int[] acc, int typeLocal) {
-		// TODO Auto-generated method stub 
-		//si ens falta temps ja ho farem...
+		// TODO comprobar que les caracteristiques pertanyen al tipo local
+		//si ens sobra temps ja ho farem...
 		return true;
 	}
 
 
 	//nomes mirem el codi carrerer
-	private boolean isValidAddress(int idStreet) {
+	private boolean isValidAddress(Address addr) {
 		boolean valid = false;
+		if(addr.getStreetName().isEmpty() || addr.getType().isEmpty() || addr.getNumBuilding() <= 0)
+			return false;
 		try     
 		{			
 			InitialContext cxt = new InitialContext();
-			DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");							
+			DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");						
 					
 			Connection connection = ds.getConnection();
 			Statement stm = connection.createStatement(); 
-			valid=stm.execute("select codcar from carrerer where codcar="+idStreet+";");
+			valid=stm.execute("select codcar from carrerer where codcar="+addr.getIdStreet()+";");
 				
 			connection.close();
 			stm.close();			
@@ -96,62 +84,6 @@ public class Local {
 		}catch(Exception e){}
 		
 		return valid;
-	}
-	
-	public int getId(){
-		return idLocal;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getTypeLocal() {
-		return typeLocal;
-	}
-
-	public void setTypeLocal(int typeLocal) {
-		this.typeLocal = typeLocal;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public String getObservations() {
-		return observations;
-	}
-
-	public void setObservations(String observations) {
-		this.observations = observations;
-	}
-
-	public boolean isValidLocal() {
-		return validated;
-	}
-
-	public void setValidLocal(boolean valid) {
-		this.validated = valid;
-	}
-	
-	public Coord getCoordenates(){
-		return this.coordenates;
-	}
-	
-	public void setCoordenates(Coord xy){
-		this.coordenates=xy;
-	}
-	
-	public int[] getAccessibility(){
-		return this.accessibility;
 	}
 	
 	
