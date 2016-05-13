@@ -1,24 +1,34 @@
 package beans;
 
+import java.util.List;
+
 public class Local {
 	
 	private int idLocal;
 	private String name;
 	private int typeLocal;
 	private Address address;
-	private int[] accessibility;	//[codi_caract1,valor1, ...] 
+	private List<Integer> accessibility;	//[codi_caract1, valor1, ...] 
 	private String observations;
-	//private Coord coordenates;
-	private boolean validated;
+	private char validated;
 	
 	
-	public Local(String name, int typeLocal, Address addr, int[] acc, String obs) {
+	public Local(String name, int typeLocal, Address addr, List<Integer> acc, String obs, char valid) {
+		this.name=name;
+		this.typeLocal=typeLocal;
+		this.address=addr;		//ojo!
+		this.observations=obs;
+		this.validated=valid;
+		
+	}
+	
+	public Local(String name, int typeLocal, Address addr, List<Integer> acc, String obs) {
 		this.idLocal=0;
 		this.name=name;
 		this.typeLocal=typeLocal;
 		this.address=addr;
 		this.observations=obs;
-		this.validated=false;
+		this.validated='N';
 		
 	}
 	
@@ -64,20 +74,27 @@ public class Local {
 	}
 
 	public boolean isValidLocal() {
-		return validated;
+		if(validated=='S')
+			return true;
+		return false;
 	}
 
 	public void setValidLocal(boolean valid) {
-		this.validated = valid;
+		if(valid) 
+			this.validated = 'S';
+		else 
+			this.validated = 'N';
 	}
 	
 	
-	public int[] getAccessibility(){
+	public List<Integer> getAccessibility(){
 		return this.accessibility;
 	}
 	
-
-
+	public char getValidation(){
+		
+		return validated;
+	}
 	
 
 }

@@ -3,22 +3,33 @@ package beans;
 
 public class Address {
 	
-	private int idStreet;     
+	//private int idStreet;     //DONA MASSA FEINA
 	private String type;
 	private String streetName;
 	private int num;
-	
+	/*
+	public Address(int id, String type, String streetName, int num){		
+		this.idStreet = id;
+		this.type = type;
+		this.streetName = streetName;
+		this.num = num;			
+	}
+	*/
 	public Address(String type, String streetName, int num){		
-		this.idStreet = 0;
+		//this.idStreet = 0;
 		this.type = type;
 		this.streetName = streetName;
 		this.num = num;			
 	}	
-
+	/*
 	public int getIdStreet() {
 		return idStreet;
 	}
-
+	
+	public void setIdStreet(int idStreet) {
+		this.idStreet = idStreet;
+	}
+	*/
 	public String getType() {
 		return type;
 	}
@@ -27,13 +38,9 @@ public class Address {
 		return streetName;
 	}
 
-	public int getNumBuilding() {
+	public int getNumber() {
 		return num;
-	}
-	
-	public void setIdStreet(int idStreet) {
-		this.idStreet = idStreet;
-	}
+	}	
 
 	public void setType(String type) {
 		this.type = type;
@@ -46,9 +53,6 @@ public class Address {
 	public void setNum(int num) {
 		this.num = num;
 	}
-
-
-	
-	
+		
 
 }

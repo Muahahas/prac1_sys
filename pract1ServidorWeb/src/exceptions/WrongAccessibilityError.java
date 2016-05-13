@@ -1,4 +1,4 @@
-package org.jboss.samples.webservices;
+package exceptions;
 
 public class WrongAccessibilityError extends Exception {
 
@@ -8,7 +8,7 @@ public class WrongAccessibilityError extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	public WrongAccessibilityError(){
-		super("Wrong Accessibility Report. Doesn't match with the type local.");
+		super("Wrong accessibility report. Doesn't match with type local.");
 	}
 
 }
