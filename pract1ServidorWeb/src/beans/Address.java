@@ -50,7 +50,7 @@ public class Address {
 		this.streetName = streetName;
 	}
 
-	public void setNum(int num) {
+	public void setNumber(int num) {
 		this.num = num;
 	}
 		

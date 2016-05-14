@@ -1,5 +1,6 @@
 package beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Local {
@@ -13,23 +14,19 @@ public class Local {
 	private char validated;
 	
 	
-	public Local(String name, int typeLocal, Address addr, List<Integer> acc, String obs, char valid) {
+	public Local(int id, String name, int typeLocal, Address addr, List<Integer> acc, String obs, char valid) {
+		this.idLocal=id;
 		this.name=name;
 		this.typeLocal=typeLocal;
-		this.address=addr;		//ojo!
+		this.address=addr;		//funciona!
+		this.accessibility = new ArrayList<>(acc);
 		this.observations=obs;
 		this.validated=valid;
 		
 	}
 	
 	public Local(String name, int typeLocal, Address addr, List<Integer> acc, String obs) {
-		this.idLocal=0;
-		this.name=name;
-		this.typeLocal=typeLocal;
-		this.address=addr;
-		this.observations=obs;
-		this.validated='N';
-		
+		this(0,name,typeLocal,addr,acc,obs,'N');		
 	}
 	
 	public int getId(){
