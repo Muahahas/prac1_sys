@@ -9,42 +9,38 @@
 <h1>Benvingut</h1>
 <form method="post" action="sNewLocal">
 	Introduir nom local:	
-		<input type="text" name="nomLocal">*
+		<input type="text" name="nomLocal">
 	<br>
 	Seleccionar tipo local:	
-		<select>
+		<select name="typeLocal">
 			<option value="1"> Bars i restaurants </option>
 			<option value="2"> Comerços </option>
 		</select>*		 
 	<br>
-<!-- 	Seleccionar caracteristica local:	 -->
-<!-- 		<select> -->
-<!-- 			<option value="1"> Rampa al bany </option> -->
-<!-- 			<option value="2"> Parking </option> -->
-<!-- 		</select>*		  -->
-<!-- 	<br> -->
-<!-- 	Seleccionar tipo via:	 -->
-		
-<!-- 	<br>	 -->
+
 	Introduir Carrer:
 	
 	
-	<select>
-			<option value="CA"> Carrer Jaume II</option>
-			<option value="AV"> Avinguda de les Magnolies </option>
-		</select>
+	<select name="nameAddr">
+			<option value="">Carrer Jaume II</option>
+			<option value="Avinguda de les Magnolies">Avinguda de les Magnolies </option>
+			<option value="Carrer Sant Jaume">Carrer Sant Jaume</option>			
+	</select>
+	
 		
 	<br>
 	Introduir numero:
 		<input type="number" name="num">*
 	<br>
-	Introduir observacions:
-	<textarea name="obs" cols="20" row="5"></textarea>
+	Introduir observacions:<br>
+	<textarea name="obs" cols="30" rows="5"></textarea>
 <!-- 		<input type="text" name="obs"> -->
 	<br>
 	* Camps obligatoris
 	<br>
+	<input type="text" style="display:none;" name="typeForm" value="alta1">
 	<input type="submit" value="Continua">
+	
 </form>
 
 </body>
