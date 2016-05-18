@@ -9,33 +9,31 @@ public class Local {
 	private String name;
 	private int typeLocal;
 	private Address address;
-	private List<Integer> accessibility;	//[codi_caract1, valor1, ...] 
+	private List<Integer> accessibility;	//[codi_caract1, valor1, ...]
 	private String observations;
-	private char validated;
+	private boolean validated;
 	
 	
-	public Local(int id, String name, int typeLocal, Address addr, List<Integer> acc, String obs, char valid) {
-		this.idLocal=id;
-		this.name=name;
-		this.typeLocal=typeLocal;
-		this.address=addr;		//funciona!
-		this.accessibility = new ArrayList<>(acc);
-		this.observations=obs;
-		this.validated=valid;
-		
+	public Local(int idLocal, int typeLocal, Address address, String name, String observations, boolean validated, List<Integer> accessibility) {
+		this.idLocal = idLocal;
+		this.name = name;
+		this.typeLocal = typeLocal;
+		this.address = address; 			// funciona!
+		this.accessibility = new ArrayList<>(accessibility);
+		this.observations = observations;
+		this.validated = validated;
 	}
 	
-	public Local(String name, int typeLocal, Address addr, List<Integer> acc, String obs) {
-		this(0,name,typeLocal,addr,acc,obs,'N');		
+	public Local() {
+		this(0,0,null,null,null,false,null);
 	}
 	
-	public int getId(){
+	public int getIdLocal() {
 		return idLocal;
 	}
-	
-	public void setId(int id) {
-		this.idLocal = id;
-		
+
+	public void setIdLocal(int idLocal) {
+		this.idLocal = idLocal;
 	}
 	
 	public String getName() {
@@ -69,29 +67,37 @@ public class Local {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
-
-	public boolean isValidLocal() {
-		if(validated=='S')
-			return true;
-		return false;
-	}
-
-	public void setValidLocal(boolean valid) {
-		if(valid) 
-			this.validated = 'S';
-		else 
-			this.validated = 'N';
-	}
 	
 	
 	public List<Integer> getAccessibility(){
 		return this.accessibility;
 	}
 	
-	public char getValidation(){
-		
+	public void setAccessibility(List<Integer> accessibility) {
+		this.accessibility = accessibility;
+	}
+
+	public boolean isValidated() {
 		return validated;
 	}
+
+	public void setValidated(boolean validated) {
+		this.validated = validated;
+	}
+	
+	
+	public static boolean getBooleanByCharValidated(char v) {
+		if(v == 'S') return true;
+		return false;
+	}
+	
+	public static char getCharByBooleanValidated(boolean v) {
+		if(v) return 'S';
+		return 'N';
+	}
+	
+	
+	
 	
 
 }

@@ -15,12 +15,14 @@ public class Address {
 		this.num = num;			
 	}
 	*/
-	public Address(String type, String streetName, int num){		
+	public Address(String streetName, String type, int num){		
 		//this.idStreet = 0;
 		this.type = type;
 		this.streetName = streetName;
 		this.num = num;			
 	}	
+	
+	public Address(){}
 	/*
 	public int getIdStreet() {
 		return idStreet;
