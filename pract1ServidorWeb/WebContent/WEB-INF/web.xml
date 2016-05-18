@@ -18,4 +18,13 @@
     <servlet-name>HelloWorld</servlet-name>
     <url-pattern>/HelloWorld</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <display-name>ManageLocals</display-name>
+    <servlet-name>ManageLocals</servlet-name>
+    <servlet-class>org.jboss.webservices.ManageLocals</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageLocals</servlet-name>
+    <url-pattern>/ManageLocals</url-pattern>
+  </servlet-mapping>
 </web-app>
