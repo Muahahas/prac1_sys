@@ -6,7 +6,7 @@ public class Address {
 	//private int idStreet;     //DONA MASSA FEINA
 	private String type;
 	private String streetName;
-	private int num;
+	private int number;
 	/*
 	public Address(int id, String type, String streetName, int num){		
 		this.idStreet = id;
@@ -15,11 +15,11 @@ public class Address {
 		this.num = num;			
 	}
 	*/
-	public Address(String streetName, String type, int num){		
+	public Address(String streetName, String type, int number){		
 		//this.idStreet = 0;
 		this.type = type;
 		this.streetName = streetName;
-		this.num = num;			
+		this.number = number;			
 	}	
 	
 	public Address(){}
@@ -41,7 +41,7 @@ public class Address {
 	}
 
 	public int getNumber() {
-		return num;
+		return number;
 	}	
 
 	public void setType(String type) {
@@ -53,7 +53,7 @@ public class Address {
 	}
 
 	public void setNumber(int num) {
-		this.num = num;
+		this.number = num;
 	}
 		
 

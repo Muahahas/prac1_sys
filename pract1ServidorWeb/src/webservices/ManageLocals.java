@@ -15,7 +15,7 @@ import exceptions.*;
 @WebService()
 public class ManageLocals {
 	
-	private DataBaseManager dbm = new DataBaseManager();
+	private final DataBaseManager dbm = new DataBaseManager();
 
 	//alta local	
 	@WebMethod
@@ -78,6 +78,12 @@ public class ManageLocals {
 	//validació
 	@WebMethod
 	public boolean validateLocal(int idLocal){
+		
+		String query = "update eaccessible.local set verificat='S' "
+						+ "where codilocal="+idLocal+";";
+		int r = dbm.executeUpdate(query);
+		
+		if(r!=0) return true;
 		return false;
 	}
 	
@@ -164,6 +170,24 @@ public class ManageLocals {
 		dbm.closeConnection();
 		return result;
 	}
+	
+	
+	//consulta logs
+	@WebMethod
+	public List<LogEvent> getLogByDate(String date) {
+		return null;
+	}
+	
+	@WebMethod
+	public List<LogEvent> getLogByDateAndTypeEvent(String date, int typeEvent){
+		return null;
+	}
+	
+	@WebMethod 
+	public List<String> getLogTypeEvents() {
+		return null;
+	}
+	
 
 	/******************** P R I V A T E   M E T H O D S*****************************************************************/
 	
@@ -194,17 +218,17 @@ public class ManageLocals {
 		String initQuery = "select * from eaccessible.local where ";
 		String query = initQuery;				
 		
-		if(paramIsSet[1]) query += "nomlocal='" + input.getName() + "' ";
-		if(paramIsSet[2]){
-			if(paramIsSet[1]) query += "and ";
-			query += "tipolocal=" + input.getTypeLocal() + " ";
+		if(paramIsSet[0]) query += "nomlocal='" + input.getName() + "' ";
+		if(paramIsSet[1]){
+			if(paramIsSet[0]) query += "and ";
+			query += "coditipolocal=" + input.getTypeLocal() + " ";
 		}
-		if(paramIsSet[3]){
-			if(paramIsSet[1] || paramIsSet[2]) query += "and ";
+		if(paramIsSet[2]){
+			if(paramIsSet[0] || paramIsSet[1]) query += "and ";
 			query += "nomvia='" + input.getAddress().getType() + "' and nomcarrer='" + input.getAddress().getStreetName() + "' ";
 		}
-		if(paramIsSet[4]){
-			if(paramIsSet[1] || paramIsSet[2] || paramIsSet[3]) query += "and ";
+		if(paramIsSet[3]){
+			if(paramIsSet[0] || paramIsSet[1] || paramIsSet[2]) query += "and ";
 			query += "verificat='" + Local.getCharByBooleanValidated(input.isValidated()) + "' ";
 		}
 		

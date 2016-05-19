@@ -74,7 +74,7 @@ public class Local {
 	}
 	
 	public void setAccessibility(List<Integer> accessibility) {
-		this.accessibility = accessibility;
+		this.accessibility = new ArrayList<Integer>(accessibility);
 	}
 
 	public boolean isValidated() {
