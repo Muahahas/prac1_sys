@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>pract1Servidor</name>
+	<name>Servidor</name>
 	<comment></comment>
 	<projects>
-		<project>pract1ServidorWeb</project>
+		<project>ServidorWeb</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

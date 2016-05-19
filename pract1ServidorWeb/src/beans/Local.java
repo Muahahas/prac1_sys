@@ -19,7 +19,7 @@ public class Local {
 		this.name = name;
 		this.typeLocal = typeLocal;
 		this.address = address; 			// funciona!
-		this.accessibility = new ArrayList<>(accessibility);
+		if(accessibility!=null) this.accessibility = new ArrayList<>(accessibility);
 		this.observations = observations;
 		this.validated = validated;
 	}
