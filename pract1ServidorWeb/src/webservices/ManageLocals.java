@@ -15,7 +15,8 @@ import exceptions.*;
 @WebService()
 public class ManageLocals {
 	
-	private final DataBaseManager dbm = new DataBaseManager();
+	//nomes volem una instancia
+	private static final DataBaseManager dbm = new DataBaseManager();  
 
 	//alta local	
 	@WebMethod

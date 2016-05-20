@@ -22,6 +22,11 @@ public class DataBaseManager {
 	private Connection connection;
 	
 	
+	public DataBaseManager() {
+		//initTypeOfEventsTable();
+	}
+
+
 	public void insertLocal(Local l) {
 		
 		//INSERIM LOCAL
@@ -128,7 +133,7 @@ public class DataBaseManager {
 		ResultSet rs = null;		
 		try     
 		{			
-			initConnection();
+			initConnection(jndi_database);
 			rs = stm.executeQuery(query);				
 		}catch(SQLException e){
 			System.out.println("EXECUTE QUERY: " + e.getMessage());
@@ -140,7 +145,7 @@ public class DataBaseManager {
 		int result = -1;
 		try     
 		{			
-			initConnection(); 
+			initConnection(jndi_database); 
 			result = stm.executeUpdate(query);		
 		}catch(SQLException e){
 			System.out.println("EXECUTE UPDATE: " + e.getMessage());
@@ -150,11 +155,11 @@ public class DataBaseManager {
 		return result;
 	}
 	
-	private void initConnection() {
+	private void initConnection(String jndi) {
 		
 		try {
 			InitialContext cxt = new InitialContext();
-			DataSource ds = (DataSource) cxt.lookup(jndi_database);				
+			DataSource ds = (DataSource) cxt.lookup(jndi);				
 			connection = ds.getConnection();
 			stm = connection.createStatement();
 		} catch (NamingException | SQLException e) {
@@ -170,6 +175,44 @@ public class DataBaseManager {
 		} catch (SQLException e) {
 			System.out.println("CLOSE CONNECTION: " + e.getMessage());
 		}
+	}
+	
+	
+	private void initTypeOfEventsTable() {
+		List<String> msg = new ArrayList<>();
+		msg.add("S'han cercat locals en la base de dades.");     				//getLocals
+		msg.add("S'ha consultat un local."); 					 				//getLocalById
+		msg.add("S'ha afegit un nou local a la base de dades."); 				//newLocal
+		msg.add("S'ha verificat un local.");					 				//validateLocal
+		msg.add("S'ha eliminat un local de la base de dades.");  				//removeLocal		
+		msg.add("S'han consultat els tipus de locals.");              			//getTypesOfLocals
+		msg.add("S'han consultat els nivells de caracteristiques.");  			//getLevelsOfCharacteristics
+		msg.add("S'han consultat les caracteristiques d'un tipus de local.");  	//getCharacteristicsByTypeLocal
+		
+		msg.add("S'ha produit un error en la cerca de locals.");
+		msg.add("S'ha produit un error en la consulta d'un local.");
+		msg.add("S'ha produit un error en la verificacio d'un local.");
+		msg.add("S'ha produit un error en la eliminacio d'un local.");
+		
+		
+		
+		for(int i=0; i<msg.size(); i++){
+			String query = "UPDATE log.tipusIncidencia "
+					+ "SET descripcio='" + msg.get(i) + "' WHERE codiTipusIncidencia=" + i+1 + ";" 
+					+ "IF NOT FOUND THEN "
+					+ "INSERT INTO log.tipusIncidencia values (" + i+1 + ",'" + msg.get(i) + "');"
+					+ "END IF;";
+			initConnection(jndi_log);
+			try     
+			{			 
+				stm.executeUpdate(query);		
+			}catch(SQLException e){
+				System.out.println("EXECUTE UPDATE: " + e.getMessage());
+			}
+			closeConnection();
+		}
+				
+		
 	}
 
 }
