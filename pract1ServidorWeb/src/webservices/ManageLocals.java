@@ -15,18 +15,45 @@ import exceptions.*;
 @WebService()
 public class ManageLocals {
 	
-	//nomes volem una instancia
+	
 	private static final DataBaseManager dbm = new DataBaseManager();  
 
+	
 	//alta local	
 	@WebMethod
 	public Local newLocal(Local input) 
 			throws MissingNameError,DuplicatedLocalError,WrongTypeLocalError,WrongAddressError,WrongAccessibilityError{		
 		
 		evaluateLocal(input.getName(),input.getTypeLocal(),input.getAddress(),input.getAccessibility());				
-		input.setIdLocal(dbm.getNewLocalId());					
-		dbm.insertLocal(input);		 
+		input.setIdLocal(getNewLocalId());					
 		
+		//INSERIM LOCAL
+		String query = "insert into eaccessible.local(codilocal,coditipolocal,nomcarrer,nomvia,numero,nomlocal,observacions,verificat) "
+						+ "values("+input.getIdLocal()+","+input.getTypeLocal()
+						+ ",'"+input.getAddress().getStreetName()+"','"+input.getAddress().getType()+"',"+input.getAddress().getNumber()
+						+ ",'"+input.getName()+"','"+input.getObservations()+"','"+Local.getCharByBooleanValidated(input.isValidated())+"');";			
+		int r = dbm.executeUpdate(query);	
+		if(r<=0){
+			dbm.log(103);
+			return null;
+		}
+		
+		//INSERIM EL INFORME DE ACCESSIBILITAT
+		int id_acc = getNewAccessibilityId();
+		List<Integer> acc = new ArrayList<>(input.getAccessibility());
+		for(int i=0; i<=acc.size()-2; i+=2){
+			query = "insert into eaccessible.accessibilitat "
+					+ "values("+id_acc+","+input.getIdLocal()+","
+					+ acc.get(i)+","+acc.get(i+1)+");";
+			r = dbm.executeUpdate(query);
+			if(r<=0){
+				dbm.log(103);
+				return null;
+			}
+			id_acc++;
+		}		
+		
+		dbm.log(3);
 		return input;
 	}
 	
@@ -34,19 +61,31 @@ public class ManageLocals {
 	@WebMethod
 	public List<Local> getLocals(Local input, boolean[] paramIsSet) throws MissingSearchCriteriaError{		
 		
-		String query = buildDynamicQuery(input,paramIsSet);		
+		String query = buildSearchQuery(input,paramIsSet);		
 
-		ResultSet rs = dbm.executeQuery(query);		
+		ResultSet rs = dbm.executeQuery(query);	
 		List<Local> result = new ArrayList<>();
 		try {
-			while(rs.next()){				
+			if(!rs.next()){
+				dbm.closeConnection();
+				dbm.log(101);
+				return null;
+			}
+			do{				
 				Local l = new Local();	
 				l.setIdLocal(rs.getInt("codilocal"));
 				l.setName(rs.getString("nomlocal"));
 				result.add(l);				
-			}			
-		} catch (SQLException e) {}
+			}while(rs.next());			
+		} catch (SQLException e) {
+			dbm.closeConnection();
+			dbm.log(101);
+			System.err.println("getLocals: "+e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();		
+		
+		dbm.log(1);
 		return result;
 	}
 	
@@ -57,21 +96,31 @@ public class ManageLocals {
 		
 		String query = "select * from eaccessible.local where codilocal="+idLocal+";";
 		ResultSet rs = dbm.executeQuery(query);
-		if(rs == null) throw new LocalNotFoundError(idLocal);
 		Local result = new Local();
 		try {
-			rs.next();
+			if(!rs.next()){
+				dbm.closeConnection();
+				dbm.log(102);
+				throw new LocalNotFoundError(idLocal);
+			}
+			
 			result.setIdLocal(rs.getInt("codilocal"));
 			result.setTypeLocal(rs.getInt("coditipolocal"));
 			result.setAddress(new Address(rs.getString("nomcarrer"),rs.getString("nomvia"),rs.getInt("numero")));
 			result.setName(rs.getString("nomlocal"));
 			result.setObservations(rs.getString("observacions"));
 			result.setValidated(Local.getBooleanByCharValidated(rs.getString("verificat").charAt(0)));
-		} catch (SQLException e) {}
+		} catch (SQLException e) {
+			dbm.closeConnection();
+			dbm.log(102);
+			System.err.println("getLocalById: "+e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();
 		
 		result.setAccessibility(getAccessibilityByLocal(idLocal));
 		
+		dbm.log(2);
 		return result;
 	}
 	
@@ -84,27 +133,52 @@ public class ManageLocals {
 						+ "where codilocal="+idLocal+";";
 		int r = dbm.executeUpdate(query);
 		
-		if(r!=0) return true;
+		if(r>0){
+			dbm.log(4);
+			return true;
+		}
+		dbm.log(104);
 		return false;
 	}
 	
 	//baixa
 	@WebMethod
 	public boolean removeLocal(int idLocal){
-		return false;
+		String query = "delete from eaccessible.accessibilitat where codilocal="+idLocal+"; "
+				+"delete from eaccessible.local where codilocal="+idLocal+";";		
+		int r = dbm.executeUpdate(query);		
+		if(r<=0){
+			dbm.log(105);
+			return false;
+		}
+		
+		dbm.log(5);
+		return true;
 	}
 	
 	//consulta carrers
 	@WebMethod
 	public List<String> getStreets(){
 		String query = "select codvia,nomcar from eaccessible.carrerer;";
-		ResultSet rs = dbm.executeQuery(query);
+		ResultSet rs = dbm.executeQuery(query);		
 		List<String> result = new ArrayList<>();
 		try {
-			while(rs.next())
+			if(!rs.next()){
+				dbm.closeConnection();
+				dbm.log(109);
+				return null;
+			}
+			do
 				result.add(rs.getString(1)+", "+rs.getString(2));
-		} catch (SQLException e) {}
+			while(rs.next());
+		} catch (SQLException e) {
+			dbm.closeConnection();
+			dbm.log(109);
+			System.err.println("getStreets: "+e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();
+		dbm.log(9);
 		return result;
 	}
 	
@@ -113,12 +187,23 @@ public class ManageLocals {
 	@WebMethod
 	public List<String> getTypesOfLocals(){
 		String query = "select nomtipolocalca from eaccessible.tipolocal;";
-		ResultSet rs = dbm.executeQuery(query);
+		ResultSet rs = dbm.executeQuery(query);		
 		List<String> result = new ArrayList<>();
 		try {
-			while(rs.next())
+			if(!rs.next()){
+				dbm.closeConnection();
+				dbm.log(107);
+				return null;
+			}
+			do
 				result.add(rs.getString(1));
-		} catch (SQLException e) {}
+			while(rs.next());
+		} catch (SQLException e) {
+			dbm.closeConnection();
+			dbm.log(107);
+			System.err.println("getTypesOfLocals: "+e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();
 		return result;
 	}
@@ -127,14 +212,26 @@ public class ManageLocals {
 	@WebMethod
 	public List<String> getLevelsOfCharacteristics(){
 		String query = "select nomnivellca from eaccessible.nivell;";
-		ResultSet rs = dbm.executeQuery(query);
+		ResultSet rs = dbm.executeQuery(query);		
 		List<String> result = new ArrayList<>();
 		try{
-			while(rs.next()){
-				result.add(rs.getString(1));
+			if(!rs.next()){
+				dbm.closeConnection();
+				dbm.log(107);
+				return null;
 			}
-		}catch(SQLException e){}
+			do{
+				result.add(rs.getString(1));
+			}while(rs.next());
+		}catch(SQLException e){
+			dbm.closeConnection();
+			dbm.log(107);
+			System.err.println("getLevelsOfCharacteristics: " + e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();
+		
+		dbm.log(7);
 		return result;
 	}
 	
@@ -146,13 +243,25 @@ public class ManageLocals {
 						+ "from eaccessible.caracteristica c, eaccessible.caracteristicatipolocal ctl "
 						+ "where c.codicaracteristica=ctl.codicaracteristica "
 						+ "and ctl.coditipolocal="+typeLocal+";";
-		ResultSet rs = dbm.executeQuery(query);
+		ResultSet rs = dbm.executeQuery(query);		
 		try {
-			while(rs.next()){			
-				result.add(new Characteristic(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4)));
+			if(!rs.next()){
+				dbm.closeConnection();
+				dbm.log(108);
+				return null;
 			}
-		}catch (SQLException e) {}
+			do{			
+				result.add(new Characteristic(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4)));
+			}while(rs.next());
+		}catch (SQLException e) {
+			dbm.closeConnection();
+			dbm.log(108);
+			System.err.println("getCharacteristicsByTypeLocal: "+e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();
+		
+		dbm.log(8);
 		return result;
 	}
 	
@@ -163,11 +272,19 @@ public class ManageLocals {
 		ResultSet rs = dbm.executeQuery(query);
 		List<Integer> result = new ArrayList<>();
 		try {
-			while(rs.next()){
+			if(!rs.next()){
+				dbm.closeConnection();
+				return null;
+			}
+			do{
 				result.add(rs.getInt("codicaracteristica"));
 				result.add(rs.getInt("valor"));				
-			}
-		} catch (SQLException e) {}
+			}while(rs.next());
+		} catch (SQLException e) {
+			dbm.closeConnection();
+			System.err.println("getAccessibilityByLocal: "+e.getMessage());
+			return null;
+		}
 		dbm.closeConnection();
 		return result;
 	}
@@ -196,25 +313,110 @@ public class ManageLocals {
 	private void evaluateLocal(String name, int typeLocal, Address addr, List<Integer> acc) 
 			throws MissingNameError,DuplicatedLocalError,WrongTypeLocalError,WrongAddressError,WrongAccessibilityError {		
 		
-		if(name.isEmpty())
+		if(name.isEmpty()){
+			dbm.log(103);
 			throw new MissingNameError();
+		}
 		
-		if(dbm.isDuplicatedLocal(name,addr))
+		if(isDuplicatedLocal(name,addr)){
+			dbm.log(103);
 			throw new DuplicatedLocalError();
+		}
 				
-		if(!dbm.hasValidTypeLocal(typeLocal))
-			throw new WrongTypeLocalError();			
+		if(!hasValidTypeLocal(typeLocal)){
+			dbm.log(103);
+			throw new WrongTypeLocalError();
+		}
 		
-		if(!dbm.hasValidAddress(addr))
+		if(!hasValidAddress(addr)){
+			dbm.log(103);
 			throw new WrongAddressError();
+		}
 		
-		if(!dbm.hasValidAccessibility(acc,typeLocal))
+		if(!hasValidAccessibility(acc,typeLocal)){
+			dbm.log(103);
 			throw new WrongAccessibilityError();
+		}
 
+	}
+
+	
+	
+	/***************** GENERACIÓ DE IDs *****************************************/
+	
+	private int getNewLocalId() {		
+		return dbm.getLastIntElement("codilocal","eaccessible.local") + 1;
+	}
+	
+	private int getNewAccessibilityId() {
+		return dbm.getLastIntElement("codiaccessibilitat","eaccessible.accessibilitat") + 1;
 	}
 	
 	
-	private String buildDynamicQuery(Local input, boolean[] paramIsSet) throws MissingSearchCriteriaError {
+	/****************** EVALUACIONS DE LOCAL ***********************************/
+	
+	private boolean isDuplicatedLocal(String name, Address addr) {
+		String query = "select nomlocal "
+						+ "from eaccessible.local "
+						+ "where nomlocal='"+name+"' and "
+						+ "nomcarrer='"+addr.getStreetName()+"' and numero="+addr.getNumber()+";";
+		ResultSet rs = dbm.executeQuery(query);
+		try {
+			if(rs.next()) return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private boolean hasValidAccessibility(List<Integer> acc, int typeLocal) {
+		// TODO comprobar que les caracteristiques pertanyen al tipo local
+		//si ens sobra temps ja ho farem...
+		return true;
+	}
+
+
+	private boolean hasValidAddress(Address addr) {
+		
+		if(addr.getStreetName().isEmpty() || addr.getType().isEmpty() || addr.getNumber() <= 0)
+			return false;
+		
+		String query = "select * "
+						+ "from eaccessible.carrerer "
+						+ "where codvia='"+addr.getType()+"' "
+						+ "and nomcar='"+addr.getStreetName()+"';";
+		ResultSet rs = dbm.executeQuery(query);
+		try {
+			if(rs.next()) return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+
+	private boolean hasValidTypeLocal(int typeLocal) {
+		
+		String query = "select * "
+						+ "from eaccessible.tipolocal "
+						+ "where coditipolocal="+typeLocal+";";
+		ResultSet rs = dbm.executeQuery(query);
+		try {
+			if(rs.next()) return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	
+	
+	private String buildSearchQuery(Local input, boolean[] paramIsSet) throws MissingSearchCriteriaError {
 		
 		String initQuery = "select * from eaccessible.local where ";
 		String query = initQuery;				

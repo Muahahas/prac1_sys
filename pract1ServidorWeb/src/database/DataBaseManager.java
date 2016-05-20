@@ -11,119 +11,91 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import beans.Address;
-import beans.Local;
-
 public class DataBaseManager {
 	
 	private final String jndi_database = "java:jboss/PostgreSQL/eAccessible";
-	private final String jndi_log      = "java:jboss/PostgreSQL/log";
+	private final String jndi_log      = "java:jboss/PostgreSQL/incidencia";
+	
+	private final List<String> info = new ArrayList<>();
+	private final List<String> err = new ArrayList<>();
+	
 	private Statement stm;
 	private Connection connection;
 	
 	
 	public DataBaseManager() {
-		//initTypeOfEventsTable();
+		info.add("Consulta de locals");     							//getLocals
+		info.add("Consulta d''un local"); 					 			//getLocalById
+		info.add("Inserció de local"); 									//newLocal
+		info.add("Verificació de local");					 			//validateLocal
+		info.add("Eliminació de local");  								//removeLocal		
+		info.add("Consulta de tipus locals");              				//getTypesOfLocals
+		info.add("Consulta de nivells de caracteristiques");  			//getLevelsOfCharacteristics
+		info.add("Consulta de caracteristiques d''un tipus de local"); //getCharacteristicsByTypeLocal
+		info.add("Consulta de carrerer");
+		// AQUI AFEGIR NOUS MISSATGES DE INFO
+
+		err.add("Error cercant locals");
+		err.add("Error consultant un local");
+		err.add("Error inserint un local");
+		err.add("Error verificant un local.");
+		err.add("Error eliminant un local.");
+		err.add("Error consultant els tipus de locals");
+		err.add("Error consultant els nivells de caracteristiques");
+		err.add("Error consultant les caracterisqtiques d''un tipus de local");
+		err.add("Error consultant el carrerer");
+		// AQUI AFEGIR NOUS MISSATGES DE ERROR
+		
+		initTypeOfEventsTable(info,err);
+	}
+	
+	
+	public void log(int id) {
+		int id_incidencia = getLastIntElement("\"idIncidencia\"","log.incidencia",jndi_log) + 1;
+		/*
+		Date d = new Date();
+		DateFormat dateFormat1 = new SimpleDateFormat("MM/dd/yyyy");
+		String date = dateFormat1.format(d);		
+		DateFormat dateFormat2 = new SimpleDateFormat("HH:mm:ss");
+		String timestamp = dateFormat2.format(d); 
+		*/
+		String query = "insert into log.incidencia "
+				+ "values("+id_incidencia+",now(),now(),"+id+");";
+		executeUpdate(query,jndi_log);
+		if(id<100) System.out.println(id+" - "+info.get(id-1));
+		else	   System.err.println(id+" - "+err.get(id-100-1));
+		
 	}
 
 
-	public void insertLocal(Local l) {
-		
-		//INSERIM LOCAL
-		String query = "insert into eaccessible.local(codilocal,coditipolocal,nomcarrer,nomvia,numero,nomlocal,observacions,verificat) "
-						+ "values("+l.getIdLocal()+","+l.getTypeLocal()
-						+ ",'"+l.getAddress().getStreetName()+"','"+l.getAddress().getType()+"',"+l.getAddress().getNumber()
-						+ ",'"+l.getName()+"','"+l.getObservations()+"','"+Local.getCharByBooleanValidated(l.isValidated())+"');";			
-		int r = executeUpdate(query);		
-		
-		//INSERIM EL INFORME DE ACCESSIBILITAT
-		int id_acc = getNewAccessibilityId();
-		List<Integer> acc = new ArrayList<>(l.getAccessibility());
-		System.out.println("size: "+acc.size());
-		for(int i=0; i<=acc.size()-2; i+=2){
-			System.out.println("acc: "+ acc.get(i));
-			query = "insert into eaccessible.accessibilitat "
-					+ "values("+id_acc+","+l.getIdLocal()+","
-					+ acc.get(i)+","+acc.get(i+1)+");";
-			r = executeUpdate(query);				
-			System.out.println(r);
-			id_acc++;
-		}		
-		
-	}
-	
-	
-	/***************** GENERACIÓ DE IDs *****************************************/
-	
-	public int getNewLocalId() {		
-		return getLastIntElement("codilocal","local") + 1;
-	}
-	
-	public int getNewAccessibilityId() {
-		return getLastIntElement("codiaccessibilitat","accessibilitat") + 1;
-	}
-	
-	
-	/****************** EVALUACIONS DE LOCAL ***********************************/
-	
-	public boolean isDuplicatedLocal(String name, Address addr) {
-		String query = "select nomlocal "
-						+ "from eaccessible.local "
-						+ "where nomlocal='"+name+"' and "
-						+ "nomcarrer='"+addr.getStreetName()+"' and numero="+addr.getNumber()+";";
-		ResultSet rs = executeQuery(query);
-		if(rs == null) return true;
-		return false;
-	}
-
-	public boolean hasValidAccessibility(List<Integer> acc, int typeLocal) {
-		// TODO comprobar que les caracteristiques pertanyen al tipo local
-		//si ens sobra temps ja ho farem...
-		return true;
-	}
-
-
-	public boolean hasValidAddress(Address addr) {
-		
-		if(addr.getStreetName().isEmpty() || addr.getType().isEmpty() || addr.getNumber() <= 0)
-			return false;
-		
-		String query = "select * "
-						+ "from eaccessible.carrerer "
-						+ "where codvia='"+addr.getType()+"' "
-						+ "and nomcar='"+addr.getStreetName()+"';";
-		ResultSet rs = executeQuery(query);
-		if(rs != null) return true;
-		
-		return false;
-	}
-	
-
-	public boolean hasValidTypeLocal(int typeLocal) {
-		
-		String query = "select * "
-						+ "from eaccessible.tipolocal "
-						+ "where coditipolocal="+typeLocal+";";
-		ResultSet rs = executeQuery(query);
-		if(rs != null) return true;
-		
-		return false;
-	}
-	
-	
-	/****************** ALTRES ***********************************/
 	
 	public int getLastIntElement(String col, String table) {
 		int element = 0;		
 		String query = "select " + col
-						+ " from eaccessible."+ table
+						+ " from " + table
 						+ " ORDER BY "+col+" DESC LIMIT 1;"; 
-		ResultSet rs = executeQuery(query);			
+		ResultSet rs = executeQuery(query);
 		try {
-			rs.next();
+			if(!rs.next()) return 0;
 			element = rs.getInt(1);
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			System.err.println("getLastIntElement: "+e.getMessage());
+		}
+		closeConnection();
+		return element;	
+	}
+	
+	public int getLastIntElement(String col, String table, String jndi) {
+		int element = 0;		
+		String query = "select " + col
+						+ " from " + table
+						+ " ORDER BY "+col+" DESC LIMIT 1;"; 
+		ResultSet rs = executeQuery(query,jndi);
+		try {
+			if(!rs.next()) return 0;
+			element = rs.getInt(1);
+		} catch (SQLException e) {
+			System.err.println("getLastIntElement: "+e.getMessage());
 		}
 		closeConnection();
 		return element;	
@@ -136,7 +108,19 @@ public class DataBaseManager {
 			initConnection(jndi_database);
 			rs = stm.executeQuery(query);				
 		}catch(SQLException e){
-			System.out.println("EXECUTE QUERY: " + e.getMessage());
+			System.err.println("EXECUTE QUERY: " + e.getMessage());
+		}
+		return rs;
+	}
+	
+	public ResultSet executeQuery(String query, String jndi) {		
+		ResultSet rs = null;		
+		try     
+		{			
+			initConnection(jndi);
+			rs = stm.executeQuery(query);				
+		}catch(SQLException e){
+			System.err.println("EXECUTE QUERY: " + e.getMessage());
 		}
 		return rs;
 	}
@@ -148,12 +132,40 @@ public class DataBaseManager {
 			initConnection(jndi_database); 
 			result = stm.executeUpdate(query);		
 		}catch(SQLException e){
-			System.out.println("EXECUTE UPDATE: " + e.getMessage());
+			System.err.println("EXECUTE UPDATE: " + e.getMessage());
 		}finally{
 			closeConnection();
 		}
 		return result;
 	}
+	
+	public int executeUpdate(String query,String jndi) {
+		int result = -1;
+		try     
+		{			
+			initConnection(jndi); 
+			result = stm.executeUpdate(query);		
+		}catch(SQLException e){
+			System.err.println("EXECUTE UPDATE: " + e.getMessage());
+		}finally{
+			closeConnection();
+		}
+		return result;
+	}
+	
+	
+	//S'ha de cridar després d'haver fet executeQuery i havent extret les dades del ResultSet
+	public void closeConnection(){
+		try {
+			connection.close();
+			stm.close();
+		} catch (SQLException e) {
+			System.err.println("CLOSE CONNECTION: " + e.getMessage());
+		}
+	}
+	
+	
+	/************* PRIVATE METHODS *****************************************/
 	
 	private void initConnection(String jndi) {
 		
@@ -163,56 +175,56 @@ public class DataBaseManager {
 			connection = ds.getConnection();
 			stm = connection.createStatement();
 		} catch (NamingException | SQLException e) {
-			System.out.println("INIT CONNECTION: " + e.getMessage());
-		}
-	}
-	
-	//S'ha de cridar després d'haver fet executeQuery/Update i havent extret les dades del ResultSet
-	public void closeConnection(){
-		try {
-			connection.close();
-			stm.close();
-		} catch (SQLException e) {
-			System.out.println("CLOSE CONNECTION: " + e.getMessage());
+			System.err.println("INIT CONNECTION: " + e.getMessage());
 		}
 	}
 	
 	
-	private void initTypeOfEventsTable() {
-		List<String> msg = new ArrayList<>();
-		msg.add("S'han cercat locals en la base de dades.");     				//getLocals
-		msg.add("S'ha consultat un local."); 					 				//getLocalById
-		msg.add("S'ha afegit un nou local a la base de dades."); 				//newLocal
-		msg.add("S'ha verificat un local.");					 				//validateLocal
-		msg.add("S'ha eliminat un local de la base de dades.");  				//removeLocal		
-		msg.add("S'han consultat els tipus de locals.");              			//getTypesOfLocals
-		msg.add("S'han consultat els nivells de caracteristiques.");  			//getLevelsOfCharacteristics
-		msg.add("S'han consultat les caracteristiques d'un tipus de local.");  	//getCharacteristicsByTypeLocal
+	private void initTypeOfEventsTable(List<String> info, List<String> err) {
+		System.out.println("Inicialitzant la taula tipusIncidencia...");
 		
-		msg.add("S'ha produit un error en la cerca de locals.");
-		msg.add("S'ha produit un error en la consulta d'un local.");
-		msg.add("S'ha produit un error en la verificacio d'un local.");
-		msg.add("S'ha produit un error en la eliminacio d'un local.");
+		initConnection(jndi_log);
 		
-		
-		
-		for(int i=0; i<msg.size(); i++){
-			String query = "UPDATE log.tipusIncidencia "
-					+ "SET descripcio='" + msg.get(i) + "' WHERE codiTipusIncidencia=" + i+1 + ";" 
+		int id=1;
+		for(int i=0; i<info.size(); i++){
+			String query = "do $$ begin "
+					+ "UPDATE log.\"tipusIncidencia\" "
+					+ "SET descripcio='" + info.get(i) + "' WHERE \"codiTipusIncidencia\"=" + id + "; " 
 					+ "IF NOT FOUND THEN "
-					+ "INSERT INTO log.tipusIncidencia values (" + i+1 + ",'" + msg.get(i) + "');"
-					+ "END IF;";
-			initConnection(jndi_log);
+					+ "INSERT INTO log.\"tipusIncidencia\" values (" + id + ",'" + info.get(i) + "'); "
+					+ "END IF; end $$";			
 			try     
 			{			 
 				stm.executeUpdate(query);		
 			}catch(SQLException e){
-				System.out.println("EXECUTE UPDATE: " + e.getMessage());
+				System.err.println("initTypeOfEventsTable: " + e.getMessage());
 			}
-			closeConnection();
+			id++;
+			
 		}
+		
+		id=101;
+		for(int i=0; i<err.size(); i++){
+			String query = "do $$ begin "
+					+ "UPDATE log.\"tipusIncidencia\" "
+					+ "SET descripcio='" + err.get(i) + "' WHERE \"codiTipusIncidencia\"=" + id + "; " 
+					+ "IF NOT FOUND THEN "
+					+ "INSERT INTO log.\"tipusIncidencia\" values (" + id + ",'" + err.get(i) + "'); "
+					+ "END IF; end $$";			
+			try     
+			{			 
+				stm.executeUpdate(query);		
+			}catch(SQLException e){
+				System.err.println("initTypeOfEventsTable: " + e.getMessage());
+			}
+			id++;
+			
+		}
+		
+		closeConnection();
 				
 		
 	}
+
 
 }

@@ -2,6 +2,7 @@ package webservices.clientsample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import webservices.*;
 
@@ -19,7 +20,6 @@ public class ClientSample {
 	        System.out.println("Server said: " + port1.getCharacteristicsByTypeLocal(1));
 	        System.out.println("Server said: " + port1.getStreets());
 	        System.out.println("Server said: " + port1.validateLocal(1));
-	        //System.out.println("Server said: " + port1.removeLocal(1));
 	        System.out.println("Server said: " + port1.getLocalById(1));
 	        
 	        //consultem de locals
@@ -36,15 +36,18 @@ public class ClientSample {
 	        
 	        l.setName("MANOLO");
 	        Address adr=new Address();
-	        adr.setStreetName("pepi");
+	        adr.setStreetName("LA RIOJA");
 	        adr.setType("CA");
 	        adr.setNumber(8);
 	        l.setAddress(adr);
 	        l.setObservations("muahahah");
 	        List<Integer> acc = new ArrayList<Integer>();
 	        acc.add(1); acc.add(1);
-	        l.setAccessibility(acc);	        
-	        System.out.println("Server said: " + port1.newLocal(l));
+	        l.setAccessibility(acc);	 
+	        Local l2 = port1.newLocal(l);
+	        System.out.println("Server said: " + l2);
+	        TimeUnit.SECONDS.sleep(5);
+	        System.out.println("Server said: " + port1.removeLocal(l2.getIdLocal()));
 	        
 	
 	
