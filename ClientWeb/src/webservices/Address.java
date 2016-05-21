@@ -38,9 +38,8 @@ public class Address {
     protected int number;
     protected String streetName;
     protected String type;
-    
 
-	/**
+    /**
      * Gets the value of the number property.
      * 
      */

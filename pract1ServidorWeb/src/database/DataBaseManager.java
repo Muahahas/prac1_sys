@@ -11,6 +11,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import beans.LogEvent;
+
 public class DataBaseManager {
 	
 	private final String jndi_database = "java:jboss/PostgreSQL/eAccessible";
@@ -224,6 +226,55 @@ public class DataBaseManager {
 		closeConnection();
 				
 		
+	}
+
+
+	public List<LogEvent> getLog(String start, String end, int type) {
+		String query = "select i.*,ti.descripcio from log.incidencia i, log.\"tipusIncidencia\" ti "
+						+ "where i.data between '"+start+"' and '"+end+"' "
+						+ "and i.\"codiTipusIncidencia\"=ti.\"codiTipusIncidencia\" ";
+		if(type>0) query += "and i.\"codiTipusIncidencia\"="+type+";";
+		
+		List<LogEvent> result = new ArrayList<>();
+		ResultSet rs = executeQuery(query,jndi_log);
+		try {
+			if(!rs.next()){
+				closeConnection();
+				return null;
+			}
+			do{
+				result.add(new LogEvent(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5)));
+			}while(rs.next());
+		} catch (SQLException e) {
+			closeConnection();
+			System.err.println("getLog: "+e.getMessage());
+			return null;
+		}
+		closeConnection();
+		return result;
+	}
+
+
+	public List<String> getTypeEvents() {
+		String query = "select descripcio from log.\"tipusIncidencia\";";
+		List<String> result = new ArrayList<>();
+		
+		ResultSet rs = executeQuery(query,jndi_log);
+		try {
+			if(!rs.next()){
+				closeConnection();
+				return null;
+			}
+			do{
+				result.add(rs.getString(1));
+			}while(rs.next());
+		} catch (SQLException e) {
+			closeConnection();
+			System.err.println("getTypeEvents: "+e.getMessage());
+			return null;
+		}
+		closeConnection();
+		return result;
 	}
 
 

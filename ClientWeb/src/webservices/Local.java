@@ -83,10 +83,6 @@ public class Local {
         }
         return this.accessibility;
     }
-    
-    public void setAccessibility(List<Integer> accessibility) {
-		this.accessibility = new ArrayList<Integer>(accessibility);
-	}
 
     /**
      * Gets the value of the address property.
@@ -207,5 +203,10 @@ public class Local {
     public void setValidated(boolean value) {
         this.validated = value;
     }
+
+	public void setAccessibility(List<Integer> value) {
+		this.accessibility = new ArrayList<Integer>(value);
+		
+	}
 
 }

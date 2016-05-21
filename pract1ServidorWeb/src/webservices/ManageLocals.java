@@ -2,7 +2,11 @@ package webservices;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -192,7 +196,7 @@ public class ManageLocals {
 		try {
 			if(!rs.next()){
 				dbm.closeConnection();
-				dbm.log(107);
+				dbm.log(106);
 				return null;
 			}
 			do
@@ -200,11 +204,13 @@ public class ManageLocals {
 			while(rs.next());
 		} catch (SQLException e) {
 			dbm.closeConnection();
-			dbm.log(107);
+			dbm.log(106);
 			System.err.println("getTypesOfLocals: "+e.getMessage());
 			return null;
 		}
 		dbm.closeConnection();
+		
+		dbm.log(6);
 		return result;
 	}
 	
@@ -292,18 +298,33 @@ public class ManageLocals {
 	
 	//consulta logs
 	@WebMethod
-	public List<LogEvent> getLogByDate(String date) {
-		return null;
+	public List<LogEvent> getLogByDate(String start, String end) {
+		return getLogByDateAndTypeEvent(start,end,0);
 	}
 	
 	@WebMethod
-	public List<LogEvent> getLogByDateAndTypeEvent(String date, int typeEvent){
-		return null;
+	public List<LogEvent> getLogByDateAndTypeEvent(String start, String end, int typeEvent){
+		Date s=null;
+		Date e=null;
+		try {
+			s = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+			e = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+		} catch (ParseException ex) {
+			System.err.println("getLogByDateAndTypeEvent: "+ex.getMessage());
+			return null;
+		}
+		start = new SimpleDateFormat("yyyy-MM-dd").format(s);
+		end = new SimpleDateFormat("yyyy-MM-dd").format(e);
+		
+		
+		List<LogEvent> result = dbm.getLog(start,end,typeEvent);
+		
+		return result;
 	}
 	
 	@WebMethod 
 	public List<String> getLogTypeEvents() {
-		return null;
+		return dbm.getTypeEvents();		
 	}
 	
 
