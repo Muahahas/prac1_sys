@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <display-name>ClientWeb</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>svlAlta</servlet-name>
+    <servlet-class>servlets.svlAlta</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>svlIndex</servlet-name>
+    <servlet-class>servlets.svlIndex</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>svlAlta</servlet-name>
+    <url-pattern>/svlAlta</url-pattern>
+    <url-pattern>/alta</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>svlIndex</servlet-name>
+    <url-pattern>/svlIndex</url-pattern>
+    <url-pattern>/sIndex</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>alta2</display-name>
+    <servlet-name>alta2</servlet-name>
+    <jsp-file>/alta2.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>alta2</servlet-name>
+    <url-pattern>/alta2</url-pattern>
+    <url-pattern>/jalta2</url-pattern>
+  </servlet-mapping>
+</web-app>

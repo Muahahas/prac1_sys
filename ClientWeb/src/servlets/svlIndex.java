@@ -3,11 +3,14 @@ package servlets;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import webservices.ManageLocals;
 import webservices.ManageLocalsService;
@@ -34,8 +37,10 @@ public class svlIndex extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		String action =  request.getParameter("action");
+		System.out.println("Doget del servlet Index");
 
-		if(action == "alta"){
+		if(action.equals("alta")){
+			System.out.println("Dins del if");
 			alta(request,response);
 			
 		}
@@ -53,6 +58,8 @@ public class svlIndex extends HttpServlet {
 	}
 	
 	private void alta(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
+		System.out.println("Dins de la funcio alta");
+		HttpSession session = request.getSession();
 		ManageLocalsService service = new ManageLocalsService();
         ManageLocals port1 = service.getManageLocalsPort();
         
@@ -62,6 +69,20 @@ public class svlIndex extends HttpServlet {
          
          System.out.println(streets);
          System.out.println(typeLocals);
+         
+         session.setAttribute("session.streetsL", streets);
+         session.setAttribute("session.typesL", typeLocals);
+         
+         ServletContext context = getServletContext();
+         RequestDispatcher rd = context.getRequestDispatcher("/jalta1");
+
+ 		try {
+ 			rd.forward(request, response);
+ 		} catch (ServletException | IOException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}
+         
         
         
         
