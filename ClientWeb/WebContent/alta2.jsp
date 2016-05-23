@@ -11,7 +11,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	
+<form method="post" action="alta">	
 <% for(int i = 0; i<levelsL.size();i++){ %>
 <%=levelsL.get(i)%>:<br>
 <ul>
@@ -20,14 +20,14 @@
 <li>
 <%=charactL.get(e).getName() %>
 <% if(charactL.get(e).getType()==1){ %>
-<input type="checkbox">
+<input name="idC<%=charactL.get(e).getIdCaract() %>" type="checkbox">
 <%}else{ %>
-<select>
-<option>1</option>
-<option>2</option>
-<option>3</option>
-<option>4</option>
-<option>5</option>
+<select name="idC<%=charactL.get(e).getIdCaract() %>">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
 </select>
 <%} %>
 </li>
@@ -35,7 +35,10 @@
 <%} %>
 </ul>
 <%} %>
-
+	<input type="text" style="display:none;" name="typeForm" value="alta2">
+	<input type="submit" value="Guardar">
+	
+</form>
 
 </body>
 </html>
