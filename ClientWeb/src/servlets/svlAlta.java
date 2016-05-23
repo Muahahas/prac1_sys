@@ -51,16 +51,21 @@ public class svlAlta extends HttpServlet {
 	private void doFer(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		//String typeForm = request.getParameter("typeForm");		
-		//if(typeForm.equals("alta1")){			
-			alta1(request,response);
-		//}else if(typeForm=="alta2"){
-		//	throw new NotImplementedException();
-		//}
+		String typeForm = request.getParameter("typeForm");		
+		if(typeForm.equals("alta1")){			
+			localForm(request,response);
+		}else if(typeForm=="alta2"){
+			accessibilityForm(request,response);
+		}
 		
 	}
 	
-	private void alta1(HttpServletRequest request, HttpServletResponse response){
+	private void accessibilityForm(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+	}
+
+	private void localForm(HttpServletRequest request, HttpServletResponse response){
 		HttpSession sessio;
 		
 		String nomLocal = request.getParameter("nomLocal");

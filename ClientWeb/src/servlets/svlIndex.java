@@ -41,11 +41,17 @@ public class svlIndex extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		String action =  request.getParameter("action");
-		System.out.println("Doget del servlet Index");
+
 
 		if("sAlta".equals(action)){
-			System.out.println("Dins del if");
-			alta(request,response);
+			initAlta(request,response);
+			
+		}
+		else if("sCerca".equals(action)){
+			//initCerca(request,response);
+			
+		}else if("sLog".equals(action)){
+			//initLog(request,response);
 			
 		}
 		
@@ -61,21 +67,18 @@ public class svlIndex extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private void alta(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
+	private void initAlta(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
 		System.out.println("Dins de la funcio alta");
 		HttpSession session = request.getSession();
-		ManageLocalsService service = new ManageLocalsService();
         ManageLocals port1 = service.getManageLocalsPort();
         
-         List<String> streets =  port1.getStreets();
-         
+         List<String> streets =  port1.getStreets();         
          List<String> typeLocals = port1.getTypesOfLocals();
-         
-         System.out.println(streets);
-         System.out.println(typeLocals);
+         List<String> levels = port1.getLevelsOfCharacteristics();
          
          session.setAttribute("session.streetsL", streets);
          session.setAttribute("session.typesL", typeLocals);
+         session.setAttribute("session.levelsL", levels);
          
          ServletContext context = getServletContext();
          RequestDispatcher rd = context.getRequestDispatcher("/jAlta1");
