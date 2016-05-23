@@ -86,13 +86,14 @@ public class svlAlta extends HttpServlet {
 		l.setName((String)sessio.getAttribute("sessio1.nomLocal"));
 		Address adr = new Address();
 		String adrAux = (String) sessio.getAttribute("sessio1.nameAddr"); 
-		adr.setType(adrAux.split(",")[0]);
-		adr.setStreetName(adrAux.split(",")[1]);		
+		adr.setType(adrAux.split(",")[0].trim());
+		adr.setStreetName(adrAux.split(",")[1].trim());	
+		adr.setNumber((Integer)sessio.getAttribute("sessio1.numAddr"));
 		l.setAddress(adr);
-		l.setTypeLocal(Integer.parseInt((String)sessio.getAttribute("sessio1.typeLocal")));
+		l.setTypeLocal(((Integer)sessio.getAttribute("sessio1.typeLocal")));
 		l.setObservations((String)sessio.getAttribute("sessio1.obs"));
 		l.setAccessibility(acc);
-	
+		System.out.println(l.getAccessibility());
 		try {
 			port1.newLocal(l);
 			response.getWriter().append("local creat! ;)");
@@ -114,12 +115,6 @@ public class svlAlta extends HttpServlet {
 		int numAddr =  Integer.parseInt(request.getParameter("num"));
 		String obs = request.getParameter("obs");
 		
-		
-		System.out.println("El nom �s: " + nomLocal);
-		System.out.println("El tipus �s: " + typeLocal);
-		System.out.println("Nom Addr " + nameAddr);
-		System.out.println("Num Addr: " + numAddr);
-		System.out.println("Les observacions: " + obs);
 	
 		sessio = request.getSession(true);
 		
