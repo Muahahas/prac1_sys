@@ -21,13 +21,17 @@ import webservices.ManageLocalsService;
 @WebServlet({ "/svlIndex", "/sIndex" })
 public class svlIndex extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
+	private static ManageLocalsService service;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public svlIndex() {
         super();
         // TODO Auto-generated constructor stub
+        service = new ManageLocalsService();
+        
     }
 
 	/**
@@ -39,7 +43,7 @@ public class svlIndex extends HttpServlet {
 		String action =  request.getParameter("action");
 		System.out.println("Doget del servlet Index");
 
-		if(action.equals("alta")){
+		if("sAlta".equals(action)){
 			System.out.println("Dins del if");
 			alta(request,response);
 			
@@ -74,7 +78,7 @@ public class svlIndex extends HttpServlet {
          session.setAttribute("session.typesL", typeLocals);
          
          ServletContext context = getServletContext();
-         RequestDispatcher rd = context.getRequestDispatcher("/jalta1");
+         RequestDispatcher rd = context.getRequestDispatcher("/jAlta1");
 
  		try {
  			rd.forward(request, response);

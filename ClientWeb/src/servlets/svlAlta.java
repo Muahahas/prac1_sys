@@ -51,12 +51,12 @@ public class svlAlta extends HttpServlet {
 	private void doFer(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
-		String typeForm = request.getParameter("typeForm");		
-		if(typeForm.equals("alta1")){			
+		//String typeForm = request.getParameter("typeForm");		
+		//if(typeForm.equals("alta1")){			
 			alta1(request,response);
-		}else if(typeForm=="alta2"){
-			throw new NotImplementedException();
-		}
+		//}else if(typeForm=="alta2"){
+		//	throw new NotImplementedException();
+		//}
 		
 	}
 	
@@ -71,8 +71,8 @@ public class svlAlta extends HttpServlet {
 		String obs = request.getParameter("obs");
 		
 		
-		System.out.println("El nom és: " + nomLocal);
-		System.out.println("El tipus és: " + typeLocal);
+		System.out.println("El nom ï¿½s: " + nomLocal);
+		System.out.println("El tipus ï¿½s: " + typeLocal);
 		System.out.println("Nom Addr " + nameAddr);
 		System.out.println("Num Addr: " + numAddr);
 		System.out.println("Les observacions: " + obs);

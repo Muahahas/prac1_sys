@@ -38,4 +38,15 @@
     <url-pattern>/alta2</url-pattern>
     <url-pattern>/jalta2</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>alta1</display-name>
+    <servlet-name>alta1</servlet-name>
+    <jsp-file>/alta1.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>alta1</servlet-name>
+    <url-pattern>/alta1</url-pattern>
+    <url-pattern>/jAlta1</url-pattern>
+  </servlet-mapping>
 </web-app>

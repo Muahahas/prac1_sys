@@ -11,8 +11,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<c:forEach items="${charactL}" var="char" >
-			 <c:out value="${char.name}"/>
-		</c:forEach>
+<%=charactL %>
 </body>
 </html>

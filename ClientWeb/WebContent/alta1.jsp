@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ page import="java.util.List"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <% List<String> streetsL = (List<String>)session.getAttribute("session.streetsL");%>
 <% List<String> typesL = (List<String>)session.getAttribute("session.typesL");%>
@@ -12,35 +13,33 @@
 <body>
 
 <h1>Benvingut</h1>
-<form method="post" action="sNewLocal">
+<form method="post" action="alta">
 	Introduir nom local:	
-		<input type="text" name="nomLocal">
-	<br>
-	Seleccionar tipo local:	
-	<%=typesL%>
-	 
-		<select name="typeLocal">
-		<c:forEach items="${typesL}" var="type" varStatus="loop">
-			<option value="${loop.index}"> <c:out value="${type}"/> </option>
-			</c:forEach>
-		</select>		 
+	<input type="text" name="nomLocal">
 	<br>
 	
-
+	Seleccionar tipo local:	 
+	<select name="typeLocal">
+		<%for(int i=0; i<typesL.size(); i++){ %>
+			<option value="<%=i+1%>">
+				<%=typesL.get(i) %> 
+			</option>
+		<% } %>
+	</select>		 
+	<br>
 
 	Introduir Carrer:
-	
-	<%=streetsL%>
 	<select name="nameAddr">
-	<c:forEach items="${streetsL}" var="street" >
-			<option value="${street}"> <c:out value="${street}"/></option>
-		</c:forEach>
-		</select>
-	
-		
+		<%for(int i=0; i<streetsL.size(); i++){ %>
+			<option value="<%=streetsL.get(i) %>">
+				<%=streetsL.get(i) %> 
+			</option>
+		<% } %>
+	</select>		
 	<br>
+	
 	Introduir numero:
-		<input type="number" name="num">*
+	<input type="number" name="num">*
 	<br>
 	Introduir observacions:<br>
 	<textarea name="obs" cols="30" rows="5"></textarea>
