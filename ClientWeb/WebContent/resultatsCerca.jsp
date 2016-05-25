@@ -10,15 +10,19 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<a href="sIndex?action=Cerca">Enrere</a>
+	<br><br>
 
-	Resultats
-	<br>
+	Resultat
+	<br><% if (resultL == null||resultL.isEmpty()){ %>
+	<p>No hi ha resultats</p>
+	<%}else{ %>
 	<ul>
 	<% for(int i = 0; i<resultL.size();i++){ %>
-		<li> <a href="infoLocal.html"><%=i+1 %></a>: <%=resultL.get(i).getName() %> </li>
+		<li><%=i+1 %>: <a href="sCerca?local=<%=i%>"><%=resultL.get(i).getName() %></a> </li>
 	<% } %>
 	</ul>
-
+<% } %>
 
 </body>
 </html>

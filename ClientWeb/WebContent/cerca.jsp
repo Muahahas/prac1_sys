@@ -45,6 +45,7 @@
 	<input type="checkbox" name="validat" >
 	<br>
 	<br>
+	<input name="local" value="-1" style="display:none">
 	<input type="submit" value="Cercar" id="searchBtn"/>
 
 

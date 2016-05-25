@@ -65,4 +65,14 @@
     <servlet-name>jResultatsCerca</servlet-name>
     <url-pattern>/resultat</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>infoLocal</display-name>
+    <servlet-name>infoLocal</servlet-name>
+    <jsp-file>/infoLocal.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>infoLocal</servlet-name>
+    <url-pattern>/infoLocal</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import webservices.Address;
 import webservices.Local;
+import webservices.LocalNotFoundError_Exception;
 import webservices.ManageLocals;
 import webservices.ManageLocalsService;
 import webservices.MissingSearchCriteriaError_Exception;
@@ -47,6 +48,43 @@ public class svlCerca extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		
+		int idx = Integer.parseInt(request.getParameter("local"));
+		if(idx==-1)
+			searchLocals(request,response);
+		else 
+			getLocalByIndex(request,response,idx);
+		
+	}
+
+	private void getLocalByIndex(HttpServletRequest request, HttpServletResponse response, int index) throws IOException {
+		// TODO Auto-generated method stub
+		HttpSession session = request.getSession(true);
+		List<Local> locals = (List<Local>)session.getAttribute("session.resultL");
+		int id = locals.get(index).getIdLocal();
+		Local l = null;
+		try {
+			l = port.getLocalById(id);
+		} catch (Exception e) {
+			response.getWriter().append(e.getMessage());
+			return;
+		}
+		session.setAttribute("session.Local", l);
+		
+		ServletContext context = getServletContext();
+		RequestDispatcher rd = context.getRequestDispatcher("/infoLocal");
+		try {
+			rd.forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	private void searchLocals(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// TODO Auto-generated method stub
 		Local l = new Local();
 		List<Boolean> paramIsSet = new ArrayList<Boolean>();
 		if (request.getParameter("tipusCerca1") == null) {
@@ -80,14 +118,14 @@ public class svlCerca extends HttpServlet {
 			l.setValidated(validated);
 		}
 		
-		List<Local> result = new ArrayList<Local>();
+		List<Local> result = null;
+		
 		try {
-			result.addAll(port.getLocals(l, paramIsSet));
+			result = port.getLocals(l, paramIsSet);
 		} catch (MissingSearchCriteriaError_Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			response.getWriter().append(e.getMessage());
+			return;
 		}
-		//System.out.println(result);
 		
 		ServletContext context = getServletContext();		
 		HttpSession sessio = request.getSession(true);

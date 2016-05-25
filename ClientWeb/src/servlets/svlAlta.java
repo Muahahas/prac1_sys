@@ -57,10 +57,11 @@ public class svlAlta extends HttpServlet {
 	}
 	
 	
-	/*************************************************************************************************************/
+	/**
+	 * @throws IOException ***********************************************************************************************************/
 
 	
-	private void accessibilityForm(HttpServletRequest request, HttpServletResponse response) {
+	private void accessibilityForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession sessio = request.getSession(true);
 		
 		List<Integer> acc = new ArrayList<Integer>();
@@ -90,16 +91,25 @@ public class svlAlta extends HttpServlet {
 		l.setTypeLocal(((Integer)sessio.getAttribute("sessio1.typeLocal")));
 		l.setObservations((String)sessio.getAttribute("sessio1.obs"));
 		l.setAccessibility(acc);
-		System.out.println(l.getAccessibility());
+		Local newlocal = null;
 		try {
-			port.newLocal(l);
-			response.getWriter().append("local creat! ;)");
-			//obrir pagina del local creat
-		} catch (MissingNameError_Exception | WrongTypeLocalError_Exception | DuplicatedLocalError_Exception
-				| WrongAddressError_Exception | WrongAccessibilityError_Exception | IOException e) {
+			newlocal = port.newLocal(l);
+			
+		} catch (Exception e) {
+			response.getWriter().append(e.getMessage());
+			return;
+		}
+		sessio.setAttribute("session.Local", newlocal);
+		ServletContext context = getServletContext();		
+		RequestDispatcher rd = context.getRequestDispatcher("/infoLocal");
+
+		try {
+			rd.forward(request, response);
+		} catch (ServletException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 	}
 
