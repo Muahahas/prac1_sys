@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 
+import util.dateInput;
 import webservices.Local;
 import webservices.ManageLocals;
 import webservices.ManageLocalsService;
@@ -52,7 +53,7 @@ public class svlIndex extends HttpServlet {
 			goTo("/alta1",request,response);
 		else if("Cerca".equals(action))
 			goTo("/cerca",request,response);
-		else if("Log".equals(action))
+		else if("Log".equals(action))			
 			goTo("/log",request,response);
 		
 
@@ -78,6 +79,8 @@ public class svlIndex extends HttpServlet {
 			session.setAttribute("session.typesL", port.getTypesOfLocals());
 		if(session.getAttribute("session.levelsL") == null)
 			session.setAttribute("session.levelsL", port.getLevelsOfCharacteristics());
+		if(session.getAttribute("session.typeLogL") == null)
+			session.setAttribute("session.typeLogL", port.getLogTypeEvents());
 		
 	}
 

@@ -12,6 +12,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<a href="index.html">Enrere</a>
 
 <h1>Benvingut</h1>
 <form method="post" action="sAlta">

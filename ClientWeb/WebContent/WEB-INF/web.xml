@@ -75,4 +75,26 @@
     <servlet-name>infoLocal</servlet-name>
     <url-pattern>/infoLocal</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>searchLog</display-name>
+    <servlet-name>searchLog</servlet-name>
+    <jsp-file>/searchLog.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>searchLog</servlet-name>
+    <url-pattern>/searchLog</url-pattern>
+    <url-pattern>/log</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>infoLog</display-name>
+    <servlet-name>infoLog</servlet-name>
+    <jsp-file>/infoLog.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>infoLog</servlet-name>
+    <url-pattern>/infoLog</url-pattern>
+    <url-pattern>/resultatLog</url-pattern>
+  </servlet-mapping>
 </web-app>

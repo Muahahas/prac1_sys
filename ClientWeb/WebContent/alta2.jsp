@@ -11,6 +11,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<a href="sIndex?action=Alta">Enrere</a>
 <form method="post" action="sAlta">	
 <% for(int i = 0; i<levelsL.size();i++){ %>
 <%=levelsL.get(i)%>:<br>

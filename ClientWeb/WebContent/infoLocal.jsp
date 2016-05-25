@@ -12,7 +12,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+<%if(l!=null){ %>
+<a href="sIndex?action=Cerca">Enrere</a>
 <h1><%=l.getName() %></h1>
 <p>Tipus local: <%=typesL.get(l.getTypeLocal()-1) %></p>
 <p>Adreça: <%=adr.getType() %>, <%=adr.getStreetName() %>, Nº: <%=adr.getNumber() %></p>
@@ -28,6 +29,9 @@
 <form method="post" action="sEliminar">
 <input type="submit" value="Eliminar"/>
 </form>
-
+<%}else{ %>
+<p> El local s'ha eliminat!</p>
+<a href="/">Tornar a l'inici</a>
+<%} %>
 </body>
 </html>

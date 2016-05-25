@@ -114,7 +114,7 @@ public class svlCerca extends HttpServlet {
 			paramIsSet.add(false);
 		} else {
 			paramIsSet.add(true);
-			boolean validated = !(request.getParameter("validat") == null);
+			boolean validated = (request.getParameter("validat") == "1");
 			l.setValidated(validated);
 		}
 		

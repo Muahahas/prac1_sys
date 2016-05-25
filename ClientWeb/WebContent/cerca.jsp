@@ -14,7 +14,7 @@
 <body>
 
 <h1>Cerca</h1>
-<form method="get" action="sCerca">
+<form method="post" action="sCerca">
 	Cerca per:
 	<br>
 	<input type="checkbox" name="tipusCerca1" >Nom
@@ -41,8 +41,10 @@
 	</select>	
 	<br>
 	<br>
-	<input type="checkbox" name="tipusCerca4" >Validat
-	<input type="checkbox" name="validat" >
+	<input type="checkbox" name="tipusCerca4" >Validacio: 
+	<br>
+	<input type="radio" name="validat" value="0" > Local/s no validat/s.
+	<input type="radio" name="validat" value="1"> Local/s validat/s.
 	<br>
 	<br>
 	<input name="local" value="-1" style="display:none">
