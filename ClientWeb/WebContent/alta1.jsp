@@ -14,7 +14,7 @@
 <body>
 
 <h1>Benvingut</h1>
-<form method="post" action="alta">
+<form method="post" action="sAlta">
 	Introduir nom local:	
 	<input type="text" name="nomLocal">
 	<br>

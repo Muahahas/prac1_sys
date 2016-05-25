@@ -3,7 +3,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="webservices.Local"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<% List<String> streetsL = (List<String>)session.getAttribute("session.streetsL");%>
+<% List<String> streetsL =(List<String>)session.getAttribute("session.streetsL");%>
 <% List<String> typesL = (List<String>)session.getAttribute("session.typesL");%>
 <% List<Local> resultL = (List<Local>)session.getAttribute("session.resultL");%>
 <html>
@@ -14,7 +14,7 @@
 <body>
 
 <h1>Cerca</h1>
-<form action="search" method="post">
+<form method="get" action="sCerca">
 	Cerca per:
 	<br>
 	<input type="checkbox" name="tipusCerca1" >Nom
@@ -43,19 +43,22 @@
 	<br>
 	<input type="checkbox" name="tipusCerca4" >Validat
 	<input type="checkbox" name="validat" >
-
+	<br>
+	<br>
 	<input type="submit" value="Cercar" id="searchBtn"/>
 
 
 </form>
-<br><br>
-<% if(!resultL.isEmpty() || resultL!=null) {%>
-	Resultados
-	<ul>
-	<% for(int i = 0; i<resultL.size();i++){ %>
-		<li> <a href="infoLocal.html"><%=resultL.get(i) %></a>: <%=resultL.get(i) %> </li>
-	<% } %>
-	</ul>
-<% } %>
+
+<!-- <br><br> -->
+<%-- <% if(!resultL.isEmpty() || resultL!=null) {%> --%>
+<!-- 	Resultados -->
+<!-- 	<ul> -->
+<%-- 	<% for(int i = 0; i<resultL.size();i++){ %> --%>
+<%-- 		<li> <a href="infoLocal.html"><%=resultL.get(i) %></a>: <%=resultL.get(i) %> </li> --%>
+<%-- 	<% } %> --%>
+<!-- 	</ul> -->
+<%-- <% } %> --%>
+
 </body>
 </html>

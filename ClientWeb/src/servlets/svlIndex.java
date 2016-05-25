@@ -27,98 +27,71 @@ public class svlIndex extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 	private static ManageLocalsService service;
+	private ManageLocals port;
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public svlIndex() {
         super();
-        // TODO Auto-generated constructor stub
-        service = new ManageLocalsService();
-        
+        if(service == null)
+        	service = new ManageLocalsService();
+        if(port == null)
+        	port = service.getManageLocalsPort();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+		initData(request);
 		
 		String action =  request.getParameter("action");
-
-
-		if("sAlta".equals(action)){
-			initAlta(request,response);
-			
-		}
-		else if("sCerca".equals(action)){
-			initCerca(request,response);
-			
-		}else if("sLog".equals(action)){
-			//initLog(request,response);
-			
-		}
+		if("Alta".equals(action))
+			goTo("/alta1",request,response);
+		else if("Cerca".equals(action))
+			goTo("/cerca",request,response);
+		else if("Log".equals(action))
+			goTo("/log",request,response);
 		
-		
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
-	private void initCerca(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		System.out.println("Dins de la funcio alta");
-		HttpSession session = request.getSession();
-        ManageLocals port1 = service.getManageLocalsPort();
-        List<Local> result =  new ArrayList<Local>();   
-         List<String> streets =  port1.getStreets();         
-         List<String> typeLocals = port1.getTypesOfLocals();
-         session.setAttribute("session.streetsL", streets);
-         session.setAttribute("session.typesL", typeLocals);
-         
-         ServletContext context = getServletContext();         
-         RequestDispatcher rd = context.getRequestDispatcher("/jCerca");
-
- 		try {
- 			rd.forward(request, response);
- 		} catch (ServletException | IOException e) {
- 			// TODO Auto-generated catch block
- 			e.printStackTrace();
- 		}
 	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 	
-	private void initAlta(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
-		System.out.println("Dins de la funcio alta");
-		HttpSession session = request.getSession();
-        ManageLocals port1 = service.getManageLocalsPort();
-        
-         List<String> streets =  port1.getStreets();         
-         List<String> typeLocals = port1.getTypesOfLocals();
-         List<String> levels = port1.getLevelsOfCharacteristics();
-         
-         session.setAttribute("session.streetsL", streets);
-         session.setAttribute("session.typesL", typeLocals);
-         session.setAttribute("session.levelsL", levels);
-         
-         ServletContext context = getServletContext();
-         RequestDispatcher rd = context.getRequestDispatcher("/jAlta1");
+	/*****************************************************************************************/
+	
+	
+	private void initData(HttpServletRequest request) {
 
- 		try {
- 			rd.forward(request, response);
- 		} catch (ServletException | IOException e) {
- 			// TODO Auto-generated catch block
- 			e.printStackTrace();
- 		}
-         
-        
-        
-        
+		HttpSession session = request.getSession(true);
+		if(session.getAttribute("session.streetsL") == null)
+			session.setAttribute("session.streetsL", port.getStreets());
+		if(session.getAttribute("session.typesL") == null)
+			session.setAttribute("session.typesL", port.getTypesOfLocals());
+		if(session.getAttribute("session.levelsL") == null)
+			session.setAttribute("session.levelsL", port.getLevelsOfCharacteristics());
+		
+	}
+
+	private void goTo(String url,HttpServletRequest request, HttpServletResponse response) {		
+
+		ServletContext context = getServletContext();
+		RequestDispatcher rd = context.getRequestDispatcher(url);
+
+		try {
+			rd.forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -11,7 +11,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form method="post" action="alta">	
+<form method="post" action="sAlta">	
 <% for(int i = 0; i<levelsL.size();i++){ %>
 <%=levelsL.get(i)%>:<br>
 <ul>

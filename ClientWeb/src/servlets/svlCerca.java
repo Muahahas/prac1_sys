@@ -25,13 +25,19 @@ import webservices.MissingSearchCriteriaError_Exception;
 @WebServlet({ "/svlCerca", "/sCerca" })
 public class svlCerca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static ManageLocalsService service;
+	private ManageLocals port;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public svlCerca() {
 		super();
-		// TODO Auto-generated constructor stub
+		if(service == null)
+        	service = new ManageLocalsService();
+        if(port == null)
+        	port = service.getManageLocalsPort();
 	}
 
 	/**
@@ -40,25 +46,7 @@ public class svlCerca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doFer(request, response);
-	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doFer(request, response);
-	}
-
-	private void doFer(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
-		ManageLocalsService service = new ManageLocalsService();
-		ManageLocals port1 = service.getManageLocalsPort();
 		Local l = new Local();
 		List<Boolean> paramIsSet = new ArrayList<Boolean>();
 		if (request.getParameter("tipusCerca1") == null) {
@@ -91,27 +79,39 @@ public class svlCerca extends HttpServlet {
 			boolean validated = !(request.getParameter("validat") == null);
 			l.setValidated(validated);
 		}
-		    List<Local> result = new ArrayList<Local>();
+		
+		List<Local> result = new ArrayList<Local>();
 		try {
-			 result = port1.getLocals(l, paramIsSet);
+			result.addAll(port.getLocals(l, paramIsSet));
 		} catch (MissingSearchCriteriaError_Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+		//System.out.println(result);
 		
 		ServletContext context = getServletContext();		
 		HttpSession sessio = request.getSession(true);
 		sessio.setAttribute("session.resultL", result);
 		
-		RequestDispatcher rd = context.getRequestDispatcher("/jCerca");
+		RequestDispatcher rd = context.getRequestDispatcher("/resultat");
 		try {
 			rd.forward(request, response);
 		} catch (ServletException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doGet(request, response);
+	}
+
 
 }
