@@ -48,14 +48,26 @@ public class svlCerca extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		initData(request);
 		
 		int idx = Integer.parseInt(request.getParameter("local"));
-		if(idx==-1)
+		if(idx == -1)
 			searchLocals(request,response);
 		else 
 			getLocalByIndex(request,response,idx);
 		
 	}
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doGet(request, response);
+	}
+	
 
 	private void getLocalByIndex(HttpServletRequest request, HttpServletResponse response, int index) throws IOException {
 		// TODO Auto-generated method stub
@@ -65,7 +77,7 @@ public class svlCerca extends HttpServlet {
 		Local l = null;
 		try {
 			l = port.getLocalById(id);
-		} catch (Exception e) {
+		} catch (LocalNotFoundError_Exception e) {
 			response.getWriter().append(e.getMessage());
 			return;
 		}
@@ -114,7 +126,7 @@ public class svlCerca extends HttpServlet {
 			paramIsSet.add(false);
 		} else {
 			paramIsSet.add(true);
-			boolean validated = (request.getParameter("validat") == "1");
+			boolean validated = "1".equals(request.getParameter("validat"));
 			l.setValidated(validated);
 		}
 		
@@ -141,15 +153,19 @@ public class svlCerca extends HttpServlet {
 		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
 
-		doGet(request, response);
+	
+	private void initData(HttpServletRequest request) {
+
+		HttpSession session = request.getSession(true);
+		if(session.getAttribute("session.streetsL") == null)
+			session.setAttribute("session.streetsL", port.getStreets());
+		if(session.getAttribute("session.typesL") == null)
+			session.setAttribute("session.typesL", port.getTypesOfLocals());
+		if(session.getAttribute("session.levelsL") == null)
+			session.setAttribute("session.levelsL", port.getLevelsOfCharacteristics());
+		//if(session.getAttribute("session.typeLogL") == null)
+		//	session.setAttribute("session.typeLogL", port.getLogTypeEvents());
 	}
-
 
 }

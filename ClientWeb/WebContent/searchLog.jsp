@@ -13,66 +13,68 @@
 </head>
 <body>
 
-<form method="post" action="sLog">
+<form method="get" action="sLog">
 
-Data Minima:<br>
+Desde: 
 <select name="yearsMin">
-		<%for(int i=0; i<dateInput.years.size(); i++){ %>
-			<option value="<%=dateInput.years.get(i) %>">
-				<%=dateInput.years.get(i) %> 
-			</option>
-		<% } %>
-	</select>	/
-	<select name="monthsMin">
-		<%for(int i=0; i<dateInput.months.size(); i++){ %>
-			<option value="<%=dateInput.months.get(i) %>">
-				<%=dateInput.months.get(i) %> 
-			</option>
-		<% } %>
-	</select>/
-	<select name="daysMin">
-		<%for(int i=0; i<dateInput.days.size(); i++){ %>
-			<option value="<%=dateInput.days.get(i) %>">
-				<%=dateInput.days.get(i) %> 
-			</option>
-		<% } %>
-	</select>
-	<br>
-	<br>
-	<br>
-	Data Maxima:
-<select name="yearsMax">
-		<%for(int i=0; i<dateInput.years.size(); i++){ %>
-			<option value="<%=dateInput.years.get(i) %>">
-				<%=dateInput.years.get(i) %> 
-			</option>
-		<% } %>
-	</select>	/
-	<select name="monthsMax">
-		<%for(int i=0; i<dateInput.months.size(); i++){ %>
-			<option value="<%=dateInput.months.get(i) %>">
-				<%=dateInput.months.get(i) %> 
-			</option>
-		<% } %>
-	</select>/
-	<select name="daysMax">
-		<%for(int i=0; i<dateInput.days.size(); i++){ %>
-			<option value="<%=dateInput.days.get(i) %>">
-				<%=dateInput.days.get(i) %> 
-			</option>
-		<% } %>
-	</select>
+	<%for(int i=0; i<dateInput.years.size(); i++){ %>
+		<option value="<%=dateInput.years.get(i) %>">
+			<%=dateInput.years.get(i) %> 
+		</option>
+	<% } %>
+</select>	/
+<select name="monthsMin">
+	<%for(int i=0; i<dateInput.months.size(); i++){ %>
+		<option value="<%=dateInput.months.get(i) %>">
+			<%=dateInput.months.get(i) %> 
+		</option>
+	<% } %>
+</select>	/
+<select name="daysMin">
+	<%for(int i=0; i<dateInput.days.size(); i++){ %>
+		<option value="<%=dateInput.days.get(i) %>">
+			<%=dateInput.days.get(i) %> 
+		</option>
+	<% } %>
+</select>
+<br>
 	
-	<input type="checkbox" name="isTypeEvent">
-	<select name="typeEvent">
-		<%for(int i=0; i<typeEvent.size(); i++){ %>
-			<option value="<%=i+1 %>">
-				<%=typeEvent.get(i) %> 
-			</option>
-		<% } %>
-	</select>
-	<input type="submit" value="cerca">
-	</form>
+Fins a:
+<select name="yearsMax">
+	<%for(int i=0; i<dateInput.years.size(); i++){ %>
+		<option value="<%=dateInput.years.get(i) %>">
+			<%=dateInput.years.get(i) %> 
+		</option>
+	<% } %>
+</select>	/
+<select name="monthsMax">
+	<%for(int i=0; i<dateInput.months.size(); i++){ %>
+		<option value="<%=dateInput.months.get(i) %>">
+			<%=dateInput.months.get(i) %> 
+		</option>
+	<% } %>
+</select>	/
+<select name="daysMax">
+	<%for(int i=0; i<dateInput.days.size(); i++){ %>
+		<option value="<%=dateInput.days.get(i) %>">
+			<%=dateInput.days.get(i) %> 
+		</option>
+	<% } %>
+</select>
+<br>
+	
+<input type="checkbox" name="isTypeEvent">
+<select name="typeEvent">
+	<%for(int i=0; i<typeEvent.size(); i++){ %>
+		<option value="<%=i+1 %>">
+			<%=typeEvent.get(i) %> 
+		</option>
+	<% } %>
+</select>
+<br>
+<br>
+<input type="submit" value="cerca">
+</form>
 
 </body>
 </html>

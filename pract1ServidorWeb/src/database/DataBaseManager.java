@@ -234,7 +234,7 @@ public class DataBaseManager {
 						+ "where i.data between '"+start+"' and '"+end+"' "
 						+ "and i.\"codiTipusIncidencia\"=ti.\"codiTipusIncidencia\" ";
 		if(type>0) query += "and i.\"codiTipusIncidencia\"="+type+";";
-		
+		System.out.println(query);
 		List<LogEvent> result = new ArrayList<>();
 		ResultSet rs = executeQuery(query,jndi_log);
 		try {
@@ -251,6 +251,8 @@ public class DataBaseManager {
 			return null;
 		}
 		closeConnection();
+		System.out.println("eeo: "+result);
+		
 		return result;
 	}
 

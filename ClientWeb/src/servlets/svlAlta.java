@@ -30,15 +30,25 @@ public class svlAlta extends HttpServlet {
      */
     public svlAlta() {
         super();
-        service = new ManageLocalsService();        
+		if(service == null)
+        	service = new ManageLocalsService();
+        if(port == null)
+        	port = service.getManageLocalsPort();      
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request,response);
+	}
 
-		port = service.getManageLocalsPort();
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		initData(request);
 		
 		String typeForm = request.getParameter("typeForm");		
 		if(typeForm.equals("alta1")){			
@@ -48,24 +58,12 @@ public class svlAlta extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		doGet(request, response);
-	}
-	
-	
-	/**
-	 * @throws IOException ***********************************************************************************************************/
-
 	
 	private void accessibilityForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession sessio = request.getSession(true);
 		
 		List<Integer> acc = new ArrayList<Integer>();
-		List<Characteristic> charactL = new ArrayList<>((List<Characteristic>)sessio.getAttribute("session.characteristicsL"));
+		List<Characteristic> charactL = (List<Characteristic>)sessio.getAttribute("session.characteristicsL");
 		for(int i=0; i<charactL.size(); i++){
 			int valor=0;
 			int id = charactL.get(i).getIdCaract();
@@ -93,8 +91,7 @@ public class svlAlta extends HttpServlet {
 		l.setAccessibility(acc);
 		Local newlocal = null;
 		try {
-			newlocal = port.newLocal(l);
-			
+			newlocal = port.newLocal(l);			
 		} catch (Exception e) {
 			response.getWriter().append(e.getMessage());
 			return;
@@ -120,8 +117,8 @@ public class svlAlta extends HttpServlet {
 		
 		sessio.setAttribute("sessio1.nomLocal", request.getParameter("nomLocal"));
 		sessio.setAttribute("sessio1.typeLocal", Integer.parseInt(request.getParameter("typeLocal")));
-		sessio.setAttribute("sessio1.nameAddr", request.getParameter("nameAddr"));
-		sessio.setAttribute("sessio1.numAddr", Integer.parseInt(request.getParameter("num"))); //type + street
+		sessio.setAttribute("sessio1.nameAddr", request.getParameter("nameAddr"));  //type + street
+		sessio.setAttribute("sessio1.numAddr", Integer.parseInt(request.getParameter("num"))); 
 		sessio.setAttribute("sessio1.obs", request.getParameter("obs"));
 
         sessio.setAttribute("session.characteristicsL", port.getCharacteristicsByTypeLocal(Integer.parseInt(request.getParameter("typeLocal"))));
@@ -138,5 +135,17 @@ public class svlAlta extends HttpServlet {
 		}
 		
 	}
+	
+	private void initData(HttpServletRequest request) {
 
+		HttpSession session = request.getSession(true);
+		if(session.getAttribute("session.streetsL") == null)
+			session.setAttribute("session.streetsL", port.getStreets());
+		if(session.getAttribute("session.typesL") == null)
+			session.setAttribute("session.typesL", port.getTypesOfLocals());
+		if(session.getAttribute("session.levelsL") == null)
+			session.setAttribute("session.levelsL", port.getLevelsOfCharacteristics());
+		//if(session.getAttribute("session.typeLogL") == null)
+		//	session.setAttribute("session.typeLogL", port.getLogTypeEvents());
+	}
 }

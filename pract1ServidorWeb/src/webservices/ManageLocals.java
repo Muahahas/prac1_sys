@@ -67,6 +67,7 @@ public class ManageLocals {
 		
 		String query = buildSearchQuery(input,paramIsSet);		
 
+
 		ResultSet rs = dbm.executeQuery(query);	
 		List<Local> result = new ArrayList<>();
 		try {
@@ -456,7 +457,10 @@ public class ManageLocals {
 			query += "verificat='" + Local.getCharByBooleanValidated(input.isValidated()) + "' ";
 		}
 		
-		if(query == initQuery) throw new MissingSearchCriteriaError();
+		if(query == initQuery){
+			dbm.log(101);
+			throw new MissingSearchCriteriaError();
+		}
 		
 		return query;
 	}

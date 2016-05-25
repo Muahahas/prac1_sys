@@ -4,7 +4,7 @@
 <%@ page import="webservices.LogEvent"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <% List<LogEvent> logL =(List<LogEvent>)session.getAttribute("session.logL");%>
-<% List<String> typesL = (List<String>)session.getAttribute("session.typesL");%>
+<% List<String> typesL = (List<String>)session.getAttribute("session.typeLogL");%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -22,7 +22,7 @@
 	<ul>
 	<% for(int i = 0; i<logL.size();i++){ %>
 	<% LogEvent e = logL.get(i); %>
-		<li>Id: <%=e.getId() %>, date: <%=e.getDate() %>, time: <%=e.getTime() %>, type: <%=typesL.get(e.getType()-1) %><br>
+		<li><%=i+1 %>: date: <%=e.getDate() %>, time: <%=e.getTime() %>, type: <%=typesL.get(e.getType()-1) %><br>
 			Message:<br>
 			<%=e.getMeesage() %>
 		</li>
