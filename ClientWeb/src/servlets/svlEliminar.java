@@ -32,22 +32,33 @@ public class svlEliminar extends HttpServlet {
         	service = new ManageLocalsService();
         if(port == null)
         	port = service.getManageLocalsPort();
-        // TODO Auto-generated constructor stub
+
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		delete(request,response);
+		doPost(request,response);
 	}
 
-	private void delete(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		Local l = (Local)session.getAttribute("session.Local");
 		boolean isDeleted = port.removeLocal(l.getIdLocal());
+		
+		if(isDeleted){
+			session.setAttribute("session.Local", null);
+			response.getWriter().append("Local eliminat correctament.");
+		}
+		else
+			response.getWriter().append("S'ha produit un error en la eliminació del local.");
+		
+		/*
 		if(isDeleted){
 			l = null;
 		}
@@ -60,14 +71,7 @@ public class svlEliminar extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		*/
 	}
 
 }

@@ -57,44 +57,42 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>jResultatsCerca</display-name>
-    <servlet-name>jResultatsCerca</servlet-name>
-    <jsp-file>/resultatsCerca.jsp</jsp-file>
+    <display-name>jResultatCerca</display-name>
+    <servlet-name>jResultatCerca</servlet-name>
+    <jsp-file>/resultatCerca.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
-    <servlet-name>jResultatsCerca</servlet-name>
+    <servlet-name>jResultatCerca</servlet-name>
     <url-pattern>/resultat</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>infoLocal</display-name>
-    <servlet-name>infoLocal</servlet-name>
+    <display-name>jInfoLocal</display-name>
+    <servlet-name>jInfoLocal</servlet-name>
     <jsp-file>/infoLocal.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
-    <servlet-name>infoLocal</servlet-name>
+    <servlet-name>jInfoLocal</servlet-name>
     <url-pattern>/infoLocal</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>searchLog</display-name>
-    <servlet-name>searchLog</servlet-name>
+    <display-name>jSearchLog</display-name>
+    <servlet-name>jSearchLog</servlet-name>
     <jsp-file>/searchLog.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
-    <servlet-name>searchLog</servlet-name>
-    <url-pattern>/searchLog</url-pattern>
+    <servlet-name>jSearchLog</servlet-name>
     <url-pattern>/log</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>infoLog</display-name>
-    <servlet-name>infoLog</servlet-name>
+    <display-name>jResultatLog</display-name>
+    <servlet-name>jResultatLog</servlet-name>
     <jsp-file>/infoLog.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
-    <servlet-name>infoLog</servlet-name>
-    <url-pattern>/infoLog</url-pattern>
+    <servlet-name>jResultatLog</servlet-name>
     <url-pattern>/resultatLog</url-pattern>
   </servlet-mapping>
 </web-app>

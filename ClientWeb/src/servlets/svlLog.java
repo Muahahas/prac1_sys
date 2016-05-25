@@ -48,7 +48,7 @@ public class svlLog extends HttpServlet {
 		
 		List<LogEvent> log = null;
 		int typeEvent = 0;
-		
+		/*
 		int minYear = Integer.parseInt((String)request.getParameter("yearsMin"));
 		int minMonth = Integer.parseInt((String)request.getParameter("monthsMin"));
 		int minDay = Integer.parseInt((String)request.getParameter("daysMin"));		
@@ -59,7 +59,10 @@ public class svlLog extends HttpServlet {
 		
 		String startDate = createDate(minYear,minMonth,minDay);
 		String endDate = createDate(maxYear,maxMonth,maxDay);
+		*/
 		
+		String startDate = (String)request.getParameter("yearsMin") + "-" + (String)request.getParameter("monthsMin") + "-" + (String)request.getParameter("daysMin");
+		String endDate = (String)request.getParameter("yearsMax") + "-" + (String)request.getParameter("monthsMax") + "-" + (String)request.getParameter("daysMax");
 		
 		if(request.getParameter("isTypeEvent") == null){
 			log = port.getLogByDate(startDate,endDate);
@@ -67,7 +70,7 @@ public class svlLog extends HttpServlet {
 			typeEvent = Integer.parseInt((String) request.getParameter("typeEvent"));
 			log = port.getLogByDateAndTypeEvent(startDate,endDate, typeEvent);
 		}
-
+		
 		ServletContext context = getServletContext();		
 		HttpSession sessio = request.getSession(true);
 		sessio.setAttribute("session.logL", log);

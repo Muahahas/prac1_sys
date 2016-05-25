@@ -7,12 +7,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Resultat cerca</title>
 </head>
 <body>
 	<a href="sIndex?action=Cerca">Enrere</a>
 	<br><br>
-
 	Resultat
 	<br><% if (resultL == null||resultL.isEmpty()){ %>
 	<p>No hi ha resultats</p>

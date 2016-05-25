@@ -9,12 +9,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Cerca</title>
 </head>
 <body>
-
+<a href="index.html">Enrere</a>
 <h1>Cerca</h1>
-<form method="post" action="sCerca">
+
+<form method="get" action="sCerca">
 	Cerca per:
 	<br>
 	<input type="checkbox" name="tipusCerca1" >Nom

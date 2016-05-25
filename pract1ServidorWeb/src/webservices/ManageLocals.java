@@ -309,7 +309,7 @@ public class ManageLocals {
 		Date e=null;
 		try {
 			s = new SimpleDateFormat("yyyy-MM-dd").parse(start);
-			e = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+			e = new SimpleDateFormat("yyyy-MM-dd").parse(end);
 		} catch (ParseException ex) {
 			System.err.println("getLogByDateAndTypeEvent: "+ex.getMessage());
 			return null;

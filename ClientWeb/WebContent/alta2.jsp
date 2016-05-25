@@ -8,10 +8,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Alta (2/2)</title>
 </head>
 <body>
 <a href="sIndex?action=Alta">Enrere</a>
+<h1>Informe de accessibilitat</h1>
 <form method="post" action="sAlta">	
 <% for(int i = 0; i<levelsL.size();i++){ %>
 <%=levelsL.get(i)%>:<br>

@@ -9,29 +9,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Info Local</title>
 </head>
 <body>
 <%if(l!=null){ %>
-<a href="sIndex?action=Cerca">Enrere</a>
-<h1><%=l.getName() %></h1>
-<p>Tipus local: <%=typesL.get(l.getTypeLocal()-1) %></p>
-<p>Adreça: <%=adr.getType() %>, <%=adr.getStreetName() %>, Nº: <%=adr.getNumber() %></p>
-<p>Observacions:</p>
-<%if(l.getObservations() == null) {%>
-<p>No hi ha observacions</p>
+	<a href="index.html">Enrere</a>
+	<h1><%=l.getName() %></h1>
+	<p>Tipus local: <%=typesL.get(l.getTypeLocal()-1) %></p>
+	<p>Adreça: <%=adr.getType() %>, <%=adr.getStreetName() %>, Nº: <%=adr.getNumber() %></p>
+	<p>Observacions:</p>
+	<%if(l.getObservations() == null) {%>
+		<p>No hi ha observacions</p>
+	<%}else{ %>
+		<p><%=l.getObservations() %></p>
+	<%} %>
+	<form method="post" action="sValidar">
+		<input type="submit" value="Validar" <%if(l.isValidated()){ %>disabled<%} %>/>
+	</form>
+	<br>
+	<form method="post" action="sEliminar">
+		<input type="submit" value="Eliminar"/>
+	</form>
 <%}else{ %>
-<p><%=l.getObservations() %></p>
-<%} %>
-<form method="post" action="sValidar">
-<input type="submit" value="Validar" <%if(l.isValidated()){ %>disabled<%} %>/>
-</form>
-<form method="post" action="sEliminar">
-<input type="submit" value="Eliminar"/>
-</form>
-<%}else{ %>
-<p> El local s'ha eliminat!</p>
-<a href="/">Tornar a l'inici</a>
+	<p> El local s'ha eliminat!</p>
+	<a href="index.html">Tornar a l'inici</a>
 <%} %>
 </body>
 </html>

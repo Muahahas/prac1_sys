@@ -9,12 +9,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Alta (1/2)</title>
 </head>
 <body>
 <a href="index.html">Enrere</a>
 
-<h1>Benvingut</h1>
+<h1>Alta</h1>
 <form method="post" action="sAlta">
 	Introduir nom local:	
 	<input type="text" name="nomLocal">

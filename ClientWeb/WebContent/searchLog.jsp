@@ -9,9 +9,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Cerca de locals</title>
 </head>
+
 <body>
+<a href="index.html">Enrere</a>
+<h1>Log</h1>
 
 <form method="get" action="sLog">
 
@@ -73,7 +76,7 @@ Fins a:
 </select>
 <br>
 <br>
-<input type="submit" value="cerca">
+<input type="submit" value="Cerca">
 </form>
 
 </body>

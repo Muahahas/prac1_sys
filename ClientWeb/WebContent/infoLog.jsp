@@ -8,10 +8,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Informe Log</title>
 </head>
 <body>
 
+<h1>Resultat Log</h1>
 <a href="sIndex?action=Log">Enrere</a>
 	<br><br>
 
@@ -21,7 +22,7 @@
 	<%}else{ %>
 	<ul>
 	<% for(int i = 0; i<logL.size();i++){ %>
-	<% LogEvent e = logL.get(i); %>
+		<% LogEvent e = logL.get(i); %>
 		<li><%=i+1 %>: date: <%=e.getDate() %>, time: <%=e.getTime() %>, type: <%=typesL.get(e.getType()-1) %><br>
 			Message:<br>
 			<%=e.getMeesage() %>

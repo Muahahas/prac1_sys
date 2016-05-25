@@ -50,7 +50,7 @@ public class svlValidar extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		Local l = (Local)session.getAttribute("session.Local");
 		boolean isValidated = port.validateLocal(l.getIdLocal());
-		//l.setValidated(isValidated);
+		l.setValidated(isValidated);
 		session.setAttribute("session.Local", l);
 		ServletContext context = getServletContext();
 		RequestDispatcher rd = context.getRequestDispatcher("/infoLocal");
