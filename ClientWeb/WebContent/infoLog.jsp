@@ -23,9 +23,8 @@
 	<ul>
 	<% for(int i = 0; i<logL.size();i++){ %>
 		<% LogEvent e = logL.get(i); %>
-		<li><%=i+1 %>: date: <%=e.getDate() %>, time: <%=e.getTime() %>, type: <%=typesL.get(e.getType()-1) %><br>
-			Message:<br>
-			<%=e.getMeesage() %>
+		<li><%=i+1 %>: date: <%=e.getDate() %>, time: <%=e.getTime().split(" ")[1] %> <br>
+		 type: <%=e.getType() %>	Message: <%=e.getMeesage() %>
 		</li>
 	<% } %>
 	</ul>

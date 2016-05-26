@@ -78,11 +78,11 @@ public class svlCerca extends HttpServlet {
 		try {
 			l = port.getLocalById(id);
 		} catch (LocalNotFoundError_Exception e) {
-			response.getWriter().append(e.getMessage());
+			response.getWriter().append("<a href=\"/resultat\">Enrere</a><br>"+e.getMessage());
 			return;
 		}
 		session.setAttribute("session.Local", l);
-		
+		 session.setAttribute("session.characteristicsL", port.getCharacteristicsByTypeLocal(l.getTypeLocal()));
 		ServletContext context = getServletContext();
 		RequestDispatcher rd = context.getRequestDispatcher("/infoLocal");
 		try {
@@ -135,7 +135,7 @@ public class svlCerca extends HttpServlet {
 		try {
 			result = port.getLocals(l, paramIsSet);
 		} catch (MissingSearchCriteriaError_Exception e) {
-			response.getWriter().append(e.getMessage());
+			response.getWriter().append("<a href=\"sIndex?action=Cerca\">Enrere</a><br>"+e.getMessage());
 			return;
 		}
 		

@@ -44,7 +44,7 @@
 	<br>
 	<input type="checkbox" name="tipusCerca4" >Validacio: 
 	<br>
-	<input type="radio" name="validat" value="0" > Local/s no validat/s.
+	<input type="radio" name="validat" value="0" checked > Local/s no validat/s.
 	<input type="radio" name="validat" value="1"> Local/s validat/s.
 	<br>
 	<br>

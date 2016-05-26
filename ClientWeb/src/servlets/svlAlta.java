@@ -93,7 +93,7 @@ public class svlAlta extends HttpServlet {
 		try {
 			newlocal = port.newLocal(l);			
 		} catch (Exception e) {
-			response.getWriter().append(e.getMessage());
+			response.getWriter().append("<a href=\"sIndex?action=Alta\">Enrere</a><br>"+e.getMessage());
 			return;
 		}
 		sessio.setAttribute("session.Local", newlocal);

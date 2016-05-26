@@ -17,11 +17,11 @@
 <h1>Alta</h1>
 <form method="post" action="sAlta">
 	Introduir nom local:	
-	<input type="text" name="nomLocal">
+	<input type="text" name="nomLocal" required="">*
 	<br>
 	
 	Seleccionar tipo local:	 
-	<select name="typeLocal">
+	<select name="typeLocal" >
 		<%for(int i=0; i<typesL.size(); i++){ %>
 			<option value="<%=i+1%>">
 				<%=typesL.get(i) %> 
@@ -30,7 +30,7 @@
 	</select>		 
 	<br>
 
-	Introduir Carrer:
+	Seleccionar Carrer:
 	<select name="nameAddr">
 		<%for(int i=0; i<streetsL.size(); i++){ %>
 			<option value="<%=streetsL.get(i) %>">
@@ -41,7 +41,7 @@
 	<br>
 	
 	Introduir numero:
-	<input type="number" name="num">*
+	<input type="number" name="num" required="">*
 	<br>
 	Introduir observacions:<br>
 	<textarea name="obs" cols="30" rows="5"></textarea>

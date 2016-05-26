@@ -32,7 +32,6 @@ public class svlEliminar extends HttpServlet {
         	service = new ManageLocalsService();
         if(port == null)
         	port = service.getManageLocalsPort();
-
     }
 
 	/**
@@ -53,10 +52,10 @@ public class svlEliminar extends HttpServlet {
 		
 		if(isDeleted){
 			session.setAttribute("session.Local", null);
-			response.getWriter().append("Local eliminat correctament.");
+			response.getWriter().append("<a href=\"index.html\">Enrere</a><br>Local eliminat correctament.");
 		}
 		else
-			response.getWriter().append("S'ha produit un error en la eliminació del local.");
+			response.getWriter().append("<a href=\"index.html\">Enrere</a><br>S'ha produit un error en la eliminaciï¿½ del local.");
 		
 		/*
 		if(isDeleted){
